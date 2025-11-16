@@ -1,0 +1,28 @@
+/* General table styling */
+.table-style {
+  border-collapse: collapse;
+  width: 80%;
+  margin: 20px auto;
+  font-family: Arial, sans-serif;
+  background-color: #f8f9fa;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+/* Header styling */
+.table-style th {
+  background-color: #c5e0fe;
+  color: black;
+  padding: 10px;
+  text-align: left;
+}
+
+/* Row styling */
+.table-style td {
+  border: 3px solid #ddd;
+  padding: 8px;
+}
+
+/* Hover effect */
+.table-style tr:hover {
+  background-color: #e2e6ea;
+}

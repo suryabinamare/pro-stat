@@ -1,0 +1,100 @@
+{% extends "sidebar.html" %}
+{% block content %}
+
+
+
+<div class = "container">
+    <h1>Z-Distribution</h1>     
+
+
+<h3 class = "left-aligned">Information about Z-distribution:</h3>
+<p class = "left-aligned">
+The Z-distribution, also known as the standard normal distribution, is a special case of the normal distribution 
+with a mean of 0 and a standard deviation of 1. It is symmetric about the vertical line through 0 and has a bell-shaped curve. 
+The Z-distribution is used in hypothesis testing and confidence interval estimation when the population standard deviation 
+is known or when the sample size is large enough to apply the Central Limit Theorem.</p>
+</p>
+
+<p class = "left-aligned">The area under the density curve is 1. P-value represents the area of a region
+    under the curve which is shaded blue.  Z-score is plotted along the horizontal axis as the red dot.
+    <ul>
+        <li><b> Z-score: </b> This is the value of the Z-statistic you want to evaluate. This value is plotted
+            along the horizontal axis as the red dot. You can find the Z-score when you know the P-value.</li>
+        <li><b> P-value: </b>This value
+            represents the area under the curve to the left of the Z-score and is shaded blue in the plot.
+        For \(z_0\), the p-value is given by \(p(z \leq z_0)\). </br>
+        If you want to find the area to the right of \(z_0\), </br>
+            \(p(z\geq z_0) = 1 - p(z\leq z_0)\)</li>
+
+    </li>
+    </ul> 
+</div>
+
+<div class = "container">
+    <h3 class = "left-aligned">Provide the following values:</h3>
+    <ul>
+        <li>
+            <b>Provide z-score to find P-value (leave P-value box blank)</b>
+        </li>
+        <p> OR </p>
+        <li>
+            <b>Provide P-value to find z-score (leave z-score box blank)</b>
+        </li>
+    </ul>
+
+
+
+
+   
+        <form class = "two-column-form" action = "{{ url_for('distributions.zdistribution') }}" method="post">
+        
+            <p>Enter <strong>either</strong> a Z-score or a P-value (leave other blank)</p>
+            <div class = "form-grid2">
+                <div class = "form-group"> 
+                    <label for="z_given">Z-Score:</label>
+                    <input type="number" name="z_given" step="any"><br><br>
+                </div>
+
+                <div class = "form-group">
+                <label for="p_given">P-value:</label>
+                <input type="number" name="p_given" step="any"><br>
+                </div>
+            </div>
+            <div class="submit-button">
+                <input type="submit" value="Click to Display Values and Plot">
+            </div>
+          </form> 
+</div>
+
+        
+        {% if error %}
+        <div class = "container">
+            <p style = "color:red;">{{error}}</p>
+        </div>
+        {% endif %}
+
+        {% if z_value is defined and p_value is defined and z_value is not none and p_value is not none %}
+        <div class = "container">
+            <h3 class = "left-aligned">Results:</h3>
+            <h2 style="color: red">z-Score = {{ z_value | round(4) }}</h2>
+             <h2 style="color: rgb(55, 55, 214)"> P-value = {{p_value | round(4)}}</h2>
+        
+            
+        {% endif %}
+
+
+
+        
+        {% if plot_path %}
+            <img src="{{ url_for('static', filename='plot_z.png') }}" alt="Normal Distribution Plot">
+        </div>
+        {% endif %}
+
+        
+   
+
+<hr style="height: 4px; background-color: black; border: none;">
+
+
+</div>
+{% endblock %}

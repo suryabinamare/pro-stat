@@ -1,0 +1,71 @@
+{% extends "sidebar.html" %}
+{% block title %}Descriptive Values Calculator{% endblock %}
+{% block content %}
+
+<div class="container">
+    <h4 class = "left-aligned">Upload an Excel file (CSV or XLSX)</h4>
+    <p>
+        Upload a spreadsheet and choose a column to compute following descriptive statistical values:
+    </p>
+    <ul>
+        <li>Sample size (n)</li>
+        <li>Sample mean, \(\bar{x} = \displaystyle\frac{1}{n}\sum_{i=1}^{n}x_{i}\)</li>
+        <li>Sample variance, \(s^2 = \displaystyle \frac{1}{n-1}\sum_{i=1}^{n}(x_{i}-\bar{x})^{2}
+            = \displaystyle \frac{n\sum_{i=1}x_i^2 - (\sum_{i=1}x_i)^2}{n(n-1)}\)</li> 
+        <li>Sample standard deviation, \(s = \displaystyle\sqrt{\frac{1}{n-1}\sum_{i=1}^{n}(x_{i}-\bar{x})^{2}}\)</li>
+        <li>Minimum value</li>
+        <li>25% percentile (Q1)</li>
+        <li>50% percentile (Median, Q2)</li>
+        <li>75% percentile (Q3)</li>
+        <li>Maximum value</li>
+        <li> <strong> Boxplot</strong></li>
+    </ul>
+    </div>
+
+    {% if error %}
+    <div class="container">
+        <p class="error">{{ error }}</p>
+    </div>
+    {% endif %}
+
+
+
+
+
+
+
+
+
+    <!-- File Upload Form -->
+<div class="container">
+    <div class="button-column">
+    <div style="display:flex; gap:20px;">
+        <input type="file" id="fileInput" required>
+        <button type="button" onclick="uploadFile()" class="fancy-button">Upload</button>
+    </div>
+
+    <div id="uploadOutput" style="margin-top:20px;"></div>
+    <div id="columnSelectArea" style="margin-top:20px;"></div>
+
+    <!-- BUTTON COLUMN -->
+    
+        <button onclick="showMean()" class="fancy-button">Show Statistic</button>
+        <div id="meanOutput" style="margin-top:20px;"></div>
+        <button onclick="showBoxplot()" class="fancy-button">Show Boxplot</button>
+        <div id="boxplotOutput" style="margin-top:20px;"></div>
+    </div>
+</div>
+
+
+
+
+   
+
+{% endblock %}
+
+
+
+
+{% block extra_js %}
+<script src="{{ url_for('static', filename='js/script_statvalues.js') }}"></script>
+{% endblock %}

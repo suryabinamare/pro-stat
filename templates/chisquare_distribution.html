@@ -1,0 +1,78 @@
+{% extends "sidebar.html" %}
+{% block content %}
+
+<div class="container">
+    <h1>Chi-square Distribution</h1>
+    <h3 class="left-aligned">Information about Chi-square distribution:</h3>
+    <p class="left-aligned">
+        The Chi-square distribution is a special case of the gamma distribution and is 
+        used primarily in hypothesis testing, particularly in tests of independence and goodness of fit. 
+        It is characterized by a single parameter, the degrees of freedom (df), which determines the shape of the distribution. 
+        The Chi-square distribution is right-skewed and takes only non-negative values.
+    </p>
+
+    <ol> 
+        <li><strong>\(\chi^2\) - score:</strong> The value of the Chi-square statistic you want to evaluate. This value 
+            is plotted along the horizontal axis as the red dot.
+        </li>
+        <li><strong>P-value:</strong> The probability of observing a value as extreme as the \(\chi^2\) - score. This value 
+            represents the area under the curve to the right of the \(\chi^2\) - score and is shaded blue in the plot.
+        </li>
+    </ol>
+</div>
+
+<div class="container">
+    <h3 class="left-aligned">Provide the following values</h3>
+    <ul> 
+        <li><b>Provide \(\chi^2\) - score and degree of freedom to find P-value (leave P-value box blank)</b></li>
+        <br>
+        <p>OR</p>
+        <br>
+        <li><b>Provide P-value and degree of freedom to find \(\chi^2\) - score (leave \(\chi^2\) - score box blank)</b></li>
+    </ul>
+
+    <form class="two-column-form" action="{{ url_for('distributions.chisquaredistribution') }}" method="post">
+        <div class="form-grid">  
+            <div class="form-group">
+                <label for="chisquare"> \(\chi^2\) - score: </label>
+                <input type="text" id="chisquare" name="chi-square" value="{{ request.form.get('chisquare', '') }}">
+            </div>
+
+            <div class="form-group">
+                <label for="df"> df </label>
+                <input type="text" id="df" name="df" value="{{ request.form.get('df', '') }}">
+            </div>
+
+            <div class="form-group">
+                <label for="pvalue"> P-value: </label>
+                <input type="text" id="pvalue" name="p-value" value="{{ request.form.get('pvalue', '') }}">
+            </div>
+        </div>
+
+        <div class="submit-button">
+            <input type="submit" value="Click to Display Values and Plot">
+        </div>
+    </form>
+</div>
+
+
+
+
+
+    {% if error %}
+    <div class = "container">
+        <p style="color:red">{{ error }}</p>
+    </div>
+    {% endif %}
+
+
+    {% if chisquare is not none and plot_path_chisquare %}
+    <div class = "container">
+        <h2 style="color: red"> \(\chi^2\) - score = {{ chisquare | round(4) }} </h2> 
+        <h2 style="color: rgb(55, 55, 214)"> P-value = {{ pvalue }}</h2>
+        <img src="{{ url_for('static', filename='plot_chisquare.png') }}" alt="Chi-square Density Curve">
+    </div>
+    {% endif %}
+
+
+{% endblock %}

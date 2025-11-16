@@ -1,0 +1,293 @@
+{% extends "sidebar.html" %}
+{% block title %} Independence Test {% endblock %}
+{% block content %}
+
+
+<div class = "container"> 
+
+    <h3>Chi-square Independence Test</h3>
+    <h4 class = "left-aligned">Introduction:</h4>
+    <p class = "left-aligned">
+      We apply a non-parametric test to determine if there is a significant association between two categorical variables.
+      In other words, we want to see if the distribution of one variable differs depending on the category of the other variable.
+      If such association does not exist, we say the two variables are independent.
+      This test is useful when dealing with categorical data, such as survey responses or demographic information.
+   </p>
+   <h4 class = "left-aligned">Example:</h4>
+   <p class = "left-aligned">
+      Suppose we want to test whether there is an association between educational level and diabetes status (diabetic/non-diabetic).
+      Shown below is a contingency table showing cross classification of educational level and diabetes status for a random sample of 1040
+      people in a region. At the 95% significance level, do the data provide sufficient evidence to conclude that there is an 
+      association between the two variables?
+   </p>
+      <div class="table-responsive">
+            <table class="grid">
+              <thead>
+                <tr>
+                  <th> </th>
+                  <th>Less than HS</th>
+                  <th>HS grad</th>
+                  <th>Some college</th>
+                  <th>College grad</th>
+                  <th>Total</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><b>Diabetes</b></td>
+                  <td>28</td>
+                  <td>23</td>
+                  <td>35</td>
+                  <td>20</td>
+                  <td>106</td>
+                </tr>
+                <tr>
+                  <td><b>No diabetes</b></td>
+                  <td>273</td>
+                  <td>137</td>
+                  <td>238</td>
+                  <td> 289</td>
+                  <td> 937</td>
+                </tr>
+                <tr>
+                  <td><b>Total</b></td>
+                  <td>301</td>
+                  <td>160</td>
+                  <td>273</td>
+                  <td>309</td>
+                  <td>1043</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          
+        <div class = "left-aligned" style="font-size:20px;">
+          <ul>
+            <li><b>Null Hypothesis (\(H_0\))</b>: There is no association between educational level and diabetes status.</li>
+            <li><b>Alternative Hypothesis (\(H_1\))</b>: There is an association between educational level and diabetes status.</li>
+          </ul>
+        
+        </div>
+        <div class = "container">
+          <h4 class = "left-aligned">Expected Frequencies Table:</h4>
+          <p class = "left-aligned">
+          The expected frequencies can be calculated based on the assumption that the null hypothesis is true. 
+          This involves calculating the row and column totals, and then using these to find the expected frequency for each
+           cell in the table. The expected frequency for each cell is calculated as:
+
+           \[
+           E_{ij} = \frac{(\text{Row Total})_i \times (\text{Column Total})_j}{\text{Grand Total}}
+           \]
+           where \(E_{ij}\) is the expected frequency for cell \((i, j)\), \((\text{Row Total})_i\) is the total for row \(i\), 
+           \((\text{Column Total})_j\) is the total for column \(j\), and \(\text{Grand Total}\) is the total for the entire table.
+            For example, the expected frequency for first row and first column cell is calculated as:
+           \[
+           E_{11} = \frac{(301) \times (106)}{1043} \approx 30.59
+           \]
+            The expected frequency for the second row and first column cell is calculated as:
+           \[
+           E_{21} = \frac{(301) \times (937)}{1043} \approx 270.41
+           \]
+           Continuing this process for all cells in the table will yield the expected frequencies needed for the Chi-square test.
+            The table is given below. 
+                  
+         
+
+
+
+        </div>
+          <div class="tables-container">
+              <div>
+              <h3 class = "left-aligned">Observed Frequencies</h3>
+            <table class = "grid">
+              
+              <thead>
+                <tr>
+                  <th> </th>
+                  <th>Less than HS</th>
+                  <th>HS grad</th>
+                  <th>Some college</th>
+                  <th>College grad</th>
+                  
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><b>Diabetes</b></td>
+                  <td>28</td>
+                  <td>23</td>
+                  <td>35</td>
+                  <td>20</td>
+
+                </tr>
+                <tr>
+                  <td><b>No diabetes</b></td>
+                  <td>273</td>
+                  <td>137</td>
+                  <td>238</td>
+                  <td>289</td>                  
+                </tr>            
+              </tbody>
+            </table>
+            </div>
+          
+            <div>
+              <h3 class = "left-aligned">Expected Frequencies</h3>
+            <table class = "grid">
+              
+              <thead>
+                <tr>
+                  <th> </th>
+                  <th>Less than HS</th>
+                  <th>HS grad</th>
+                  <th>Some college</th>
+                  <th>College grad</th>
+                  
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><b>Diabetes</b></td>
+                  <td>30.590</td>
+                  <td>16.261</td>
+                  <td>27.745</td>
+                  <td>31.404</td>
+
+                </tr>
+                <tr>
+                  <td><b>No diabetes</b></td>
+                  <td>270.409</td>
+                  <td>143.739</td>
+                  <td>245.255</td>
+                  <td>277.596</td>                  
+                </tr>            
+              </tbody>
+            </table>
+            </div>
+          </div>
+
+    <div class = "left-aligned">
+      <p> If educational level and diabetes status are independent, we would expect the observed frequencies to be close to the expected frequencies.
+        We find the sum of square of the deviations between observed and expected frequencies. This value is called the Chi-square statistic. 
+        Bigger differences between observed and expected frequencies will result in a larger Chi-square statistic. 
+      </p>
+        <div class = "tables-container">
+          <div>
+            <b>If we divide each row by the corresponding row sum, we turn each row into a conditional distribution. 
+          For expected frequencies, the conditional distributions are identical across rows. The graph below shows the conditional 
+          distributions across rows of observed and expected frequencies. </br>
+        </b>
+          </div>
+
+        <div style ="text-align: center;">
+        <img src="{{ url_for('static', filename='expected_values.png') }}" 
+        alt="Expected Frequencies" width="600" height="400">  
+        </div>
+
+        </div>
+      </br>
+          <b>  
+            If the variables have no association, the conditional distributions across rows of observed frequencies (left) 
+            should be similar to those of expected frequencies (right).
+          </b>
+
+        And larger chi-square statistics indicate educational level and diabetes status are not independent. 
+        The Chi-square statistic is calculated using the formula:
+        \[
+        \chi^2 = \sum_{i=1}^{r} \sum_{j=1}^{c} \frac{(O_{ij} - E_{ij})^2}{E_{ij}}
+        \]
+        where \(O_{ij}\) is the observed frequency for cell \((i, j)\), and \(E_{ij}\) is the expected frequency for cell \((i, j)\).
+        The degrees of freedom (df) for the test is calculated as:
+        \[
+        df = (r - 1) \times (c - 1)
+        \]
+        where \(r\) is the number of rows and \(c\) is the number of columns in the contingency table.
+        In this case, we have 2 rows and 4 columns, so the degrees of freedom is:
+        \[
+        df = (2 - 1) \times (4 - 1) = 3
+        \]
+        The test statistic is given by: 
+        \begin{align*}  &=\frac{(28-30.590)^2}{30.590} + \frac{(23-16.261)^2}{16.261} + \frac{(35-27.745)^2}{27.745} + \frac{(20-31.404)^2}{31.404}
+        + \frac{(273-270.409)^2}{270.409} + \frac{(137-143.739)^2}{143.739} + \frac{(238-245.255)^2}{245.255} + \frac{(289-277.596)^2}{277.596} \\
+        &= 0.219 + 2.769 + 1.896 + 4.122 + 0.024 + 0.312 + 0.213 + 0.450 \\
+        &= 10.074428
+        \end{align*}
+        <ul>
+          <li><b>Degrees of Freedom</b> = 3</li>
+          <li><b>Chi-square Statistic</b> = 10.074428</li>
+          <li><b>P-value</b> = 0.0179</li>
+          <li><b>Significance Level</b> = 0.05</li>
+          <li><b>Critical Value</b> = 7.815</li>
+        </ul>
+        <h3>Conclusion</h3>
+      <ul>
+        <li>Reject the null hypothesis since the p-value (0.0179) is less than the significance level (0.05).</li>
+        <li> <b> OR</b> Reject the null hypothesis since the Chi-square statistic (10.074428) is greater than the critical value (7.815).</li>
+        <li>There is sufficient evidence to conclude that there is an association between educational level and diabetes status.</li>
+      </ul>        
+      </p>
+
+      <h2>Try it yourself:</h2>
+      <p>Below upload a CSV or Excel file containing your data for the Chi-square test. Do not include row totals and column totals.</p>
+
+    <!-- File Upload Form -->
+    <div class = "form-grid">
+    <form action="{{ url_for('chisquare.independencetest') }}" method="post" enctype="multipart/form-data">
+         
+      <div class = "my-div">
+            <input type="file" name="independence_test" accept=".csv, .xlsx" required>
+      </div>
+
+        <div class = "my-div">
+          <label for="alpha">Significance Level, \(\alpha\):</label>
+          <input type="number" name="alpha" step="0.01" min="0" max="1"" required>
+        </div>
+        <div class = "my-div">
+            <button type="submit" class="fancy-button">Upload</button>
+        </div>
+    </form>
+      </div>
+    
+    
+
+
+ {% if values %}
+      
+    <h3>Results:</h3>
+    <ul>
+      <li><b>Chi-square Statistic</b> = {{ values[0] }}</li>
+      <li><b>P-value</b> = {{ values[1] }}</li>
+      <li><b>Critical Value</b>  = {{ values[2] }})</li>
+      <li><b>Significance Level</b> = {{ values[3] }}</li>
+      <li><b>Degrees of Freedom</b> = {{ values[4] }}</li>
+    </ul>
+
+    <div class="two-columns">
+      
+      <div class="column">
+        <h4 style="text-align:center;">Observed Frequencies</h4>
+        {{df_html | safe }}</div>
+
+      <div class="column">
+        <h4 style="text-align:center;">Expected Frequencies</h4>
+        {{df1_html | safe }}</div>
+    </div>
+  {% endif %}
+
+  {% if values %}
+
+  <img src="{{ url_for('static', filename='expected_values.png') }}" 
+  alt="Expected Values">
+
+
+  {% endif %}
+
+
+
+
+
+
+
+
+
+{% endblock %}

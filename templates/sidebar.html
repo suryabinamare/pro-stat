@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>{{ title }}</title>
+   
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+   <link rel="stylesheet" href="{{ url_for('static', filename='css/global.css') }}">
+
+<link rel="stylesheet"
+                  href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+
+<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  
+   
+
+
+<script>
+  window.MathJax = {
+    tex: {
+      displayMath: [['$$','$$'], ['\\[','\\]']],
+      inlineMath: [['$','$'], ['\\(','\\)']],
+    },
+    options: {
+      renderActions: {
+        addMenu: [] // optional: disables MathJax right-click menu
+      }
+    },
+    svg: {
+      scale: 1,
+      minScaleAdjust: 50,
+      linebreaks: { automatic: true, width: "container" }
+    },
+    chtml: {
+      linebreaks: { automatic: true, width: "container" }
+    }
+  };
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+
+
+
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+
+</head>
+<body>
+    <div class="navbar">
+        
+        <a href="{{ url_for('home') }}">Home</a>
+        
+        <a href="{{ url_for('statvalues.statvalues') }}">Calculators</a>
+        
+        <div class = "dropdown">
+        <button class="dropbtn">Distributions ▾</button>
+        <div class = "dropdown-content">
+            <a href="{{ url_for('distributions.zdistribution') }}">Normal Distribution</a>
+            <a href="{{ url_for('distributions.tdistribution') }}">t-Distribution</a> 
+            <a href="{{ url_for('distributions.chisquaredistribution') }}"> Chi-Square Distribution</a>   
+            <a href="{{ url_for('distributions.fdistribution') }}"> F-Distribution </a>      
+        </div>
+        </div>
+
+        <div class = "dropdown">
+        <button class="dropbtn">Pop Means ▾</button>
+        <div class = "dropdown-content">
+            <a href="{{ url_for('populationmean.sigmaknown') }}">Population Mean: Known Variance</a>
+            <a href="{{ url_for('populationmean.sigmaunknown') }}">Population Mean: Unknown Variance</a>  
+            <a href="{{ url_for('populationmean.twopopmeans') }}">Two Population Means: Equal Variances</a>   
+            <a href="{{ url_for('populationmean.diffpopmeans_unequalvar') }}">Two Population Means: Unequal Variances</a>   
+        </div>
+        </div>
+
+        <div class = "dropdown">
+        <button class="dropbtn">Pop Proportions ▾</button>
+        <div class ="dropdown-content">
+            <a href="{{ url_for('populationproportion.confidence_interval') }}">Confidence Interval of a Population Proportion</a>
+            <a href="{{ url_for('populationproportion.confidence_interval_two') }}">Confidence Interval of Two Population Proportions</a>
+            <a href="{{ url_for('populationproportion.proportion1') }}">A Population Proportion</a>
+            <a href="{{ url_for('populationproportion.proportion2') }}">Two Population Proportions</a>        
+        </div>
+        </div>
+
+        <div class = "dropdown">
+        <button class="dropbtn">\(\chi^2\) Tests ▾</button>
+        <div class="dropdown-content">
+            <a href="{{ url_for('chisquare.goodnesstest') }}">Goodness-of-Fit Test</a>
+            <a href="{{ url_for('chisquare.independencetest') }}">Independence Test</a>        
+        </div>
+        </div>
+
+        <div class = "dropdown">
+        <button class="dropbtn">Linear Reg ▾</button>
+        <div class="dropdown-content">
+            <a href="{{ url_for('linear.descriptive') }}">Linear Regression - Descriptive Technique</a>
+            <a href="{{ url_for('linear.inferential') }}">Linear Regression - Inferential Technique</a>        
+        </div>
+        </div>
+        
+        <a href="{{ url_for('anova.anova') }}">ANOVA</a>
+        
+        <a href="{{ url_for('contact.contact') }}">Contact</a>
+        
+    </div>
+
+   
+     
+
+
+{% block content %}{% endblock %}
+
+    <script src="{{ url_for('static', filename='js/base.js') }}"></script>
+{% block extra_js %}{% endblock %}
+
+
+
+
+</body>
+</html>

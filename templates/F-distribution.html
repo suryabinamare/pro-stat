@@ -1,0 +1,89 @@
+{% extends "sidebar.html" %}
+{% block content %}
+
+
+
+
+<div class = "container">
+    <h1>F-Distribution</h1>
+    <h3 class = "left-aligned">Information about F-distribution:</h3>
+    <p class = "left-aligned">The F-distribution is used primarily in analysis of variance (ANOVA) and regression analysis to 
+        compare variances and test hypotheses about the equality of means across multiple groups. It is characterized by 
+        two parameters: the degrees of freedom for the numerator (df1) and the degrees of freedom for the denominator (df2). 
+        The F-distribution is right-skewed and takes only non-negative values.</p>
+    <ol> 
+        <li> <strong>F-score:</strong> The value of the F-statistic you want to evaluate. This value 
+            is plotted along the horizontal axis as the red dot.
+        </li>
+        <li> <strong>P-value:</strong> The probability of observing a value as extreme as the F-score. This value 
+            represents the area under the curve to the right of the F-score and is shaded blue in the plot.
+        </li>
+    </ol>
+</div>
+
+
+
+
+<div class = "container">
+    <h3 class = "left-aligned">Provide the following values  </h3>
+    <ul> 
+        <li> <b>Provide F-score, degree of freedom for numerator and denominator to find P-value (leave P-value box blank)</b></li>
+        <p> OR </p>
+        <li> <b>Provide P-value, degree of freedom for numerator and denominator to find F-score (leave F-score box blank)</b></li>
+    </ul>
+
+
+
+    
+        <form class="two-column-form" action = "{{ url_for('distributions.fdistribution') }}" method="post">
+            <div class="form-grid2">  
+                
+                
+                <div class="form-group">
+                <label for="field1"> Dof of Numerator: </label>
+                <input type="text" id="field1" name="df_num" value="{{ request.form.df_num or '' }}">
+                </div>
+
+                <div class="form-group">
+                <label for="field2"> Dof of Denominator: </label>
+                <input type="text" id="field2" name="df_deno" value="{{ request.form.df_deno or '' }}">
+                </div>
+                <div class="form-group">
+                <label for="field1"> F-score: </label>
+                <input type="text" id="field1" name="f_value">
+                </div>
+
+                <div class="form-group">
+                <label for="field3"> P-value: </label>
+                <input type="text" id="field3" name="alpha">
+                </div>
+                
+
+            </div>
+
+            <div class="submit-button">
+                <input type="submit" value="Click to Display Values and Plot">
+            </div>
+        </form>
+        </div>
+       
+
+    {% if f_value and plot_fcurve %}
+    <div class = "container">
+        <h3 class = "left-aligned">Results:</h3>
+
+        <h2 style="color: red"> F-score = {{ f_value | round(4) }} </h2> 
+        <h2 style="color: rgb(55, 55, 214)"> P-value = {{param[-1]}}</h2>
+
+        <img src="{{ url_for('static', filename='fcurve.png') }}" alt="F Density Curve">
+    </div>
+    {% endif %}
+
+
+
+
+
+{% endblock %}
+
+
+

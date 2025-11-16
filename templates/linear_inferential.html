@@ -1,0 +1,129 @@
+
+{% extends "sidebar.html" %}
+{% block title %} Linear Regression {% endblock %}
+
+{% block extra_css %}
+<style>
+  body { font-family: Arial, sans-serif; padding: 20px; }
+  .pair { margin-bottom: 10px; }
+  input { width: 70px; margin-right: 5px; }
+  button { margin-top: 10px; padding: 5px 10px; cursor: pointer; }
+  .result { margin-top: 20px; font-weight: bold; color: darkblue; }
+  img { margin-top: 20px; border: 1px solid #ccc; max-width: 100%; }
+</style>
+{% endblock %}
+
+
+
+{% block content %}
+<div class = "container">
+<h3>Linear Regression: Inferential Approach</h3>
+<h5 class = "left-aligned"> Assumptions
+</h5>
+    <ol> 
+        <li><b> Independent Observations: </b>
+            The observations of the respone variable are independent of one another. 
+        </li>
+        <li> <b>Population Regression Line: </b>
+        Suppose \(x\) and \(y\) are predictor and response variables respectively on a population. 
+        The population regression line is: \[y = \beta_1x + \beta_0\]</li>
+        <li><b>Conditional mean:</b> The mean of a conditional distribution of values of response variable for the value, \(x_0\)
+        of the predictor is \(\beta_1x_0 + \beta_0\) that is it lies on the population regression line.</li>
+            <ul>
+                <li> 
+                    <b>Normality</b>: For each value of a predictor variable, the conditional probability
+                    of the values of response variable is normally distributed. This assumption is tested using the normal probability 
+                plot of the residuals.  </li>
+                <li> <b> Constant Variance: </b>
+                The variance of the conditional probability distribution is constant across all values of the predictor variable. 
+                This constant variance is denoted by \(\sigma^2\). We plot residuals against the observed values of the predictor variable
+                to test this assumption. 
+                </li>
+            </ul>
+    
+    </ol>
+
+    <h5 class = "left-aligned">Parameter Estimation:</h5>
+<p class = "left-aligned">
+    In the population regression line, \(y = \beta_1x + \beta_0\), the slope \(\beta_1\) and intercept \(\beta_0\) are unknown. 
+     We use sample regression line: \(\hat{y} = b_1x + b_0\) to estimate the unknow population regression where \(b_1\) is a point estimate of
+     \(\beta_1\) and \(b_0\) is a point estimate of \(\beta_0\). Moreover the constant standard deviation \(\sigma\) is estimated using the 
+     <b>standard error, \(s_e\)</b>. 
+</p>
+
+<h5 class = "left-aligned">Residuals:</h5>
+<p class = "left-aligned">
+    Consider the sample data is given by: 
+    <ul>
+        <li>
+        For the sample, \(\left\{ (x_1, y_1), (x_2, y_2), (x_3, y_3), \dots , (x_n, y_n) \right\}\)</li>
+        <li> 
+            Using the sample regression line: \(\hat{y} = b_1x + b_0\), for each value of predictor variable, the predicted values of
+        response variable are given by:  \(\left\{ (x_1, \hat{y}_1), (x_2, \hat{y}_2), (x_3, \hat{y}_3), \dots , (x_n, \hat{y}_n) \right\}\)  
+        <br><br>
+        So, \(\hat{y}_i = b_1x_i + b_0 \qquad \text{for all} \qquad i = 1, 2, \dots, n\)    </li>
+        <li> For each \(x_i\), the residual is given by: \(e_i = y_i - \hat{y}_i\)</li>
+        <li> SSE is the sum of squares of such residuals: <br> <br>
+        SSE = \(\displaystyle e_1^2 + e_2^2 + \dots + e_n^2 = \sum_{i = 1}^n e_i = \sum_{i=1}^n(y_i-\hat{y}_i)^2\)</li>
+        <li> Standard Error, \(s_e = \displaystyle \sqrt{\frac{SSE}{n-2}}\) </li>
+        <li> \(S_{xx} = \sum_{i=1}^n(x_i-\bar{x})^2\)</li>
+    </ul>
+</p>
+
+<div>
+    <h5 class = "left-aligned">
+        Hypothesis Testing on the Slope: 
+    </h5>
+    <ul>
+        <li> \(H_0: \beta_1 = 0\) (\(x\) and \(y\) are not linearly related.)</li>
+        <li> \(H_a: \beta_1 \neq 0\) (\(x\) and \(y\) are linearly related.) </li>
+    </ul>
+
+<p class = "left-aligned">
+    We use the distribution of the point estimate \(b_1\) for \(\beta_1\). Since \(b_1\) differes from one sample to another, it is a random variable
+    which is normally distributed with mean equal to the slope, \(\beta_1\) of the population regression line and with the
+    standard deviation of \(\displaystyle \frac{\sigma}{\sqrt{S_{xx}}}\)
+    <br> <br>
+    So the standardized variable \[z = \frac{b_1-\beta_1}{\sigma/\sqrt{S_{xx}}}\]
+    has the normal distribution. Since the common conditional standard deviation, \(\sigma\) is unknown, we replace it with the sample
+    estimate \(s_e\), the standard error of the estimate. Thus the variable 
+        \[t = \frac{b_1-\beta_1}{s_e/\sqrt{S_{xx}}}\]
+        has t-distribution with df = \(n-2\)
+</p>
+</div>
+
+<div>
+    <h4 class = "left-aligned">Procedures:</h4>
+    <ol>
+        <li> Decide on significance level, \(\alpha\).</li>
+        <li> Find the test statistics using sample data, \(t = \displaystyle \frac{b_1}{s_e/\sqrt{S_{xx}}}\)</li>
+        <li> Using table or calculator, find the critical t-value: \(t_{c} = \pm [P(t_c \leq t) = \alpha/2\)] <br>
+        The non rejection interval: = \((-t_c, t_c)\)</li>
+        <li> Use the table or calcultor and find the p-value = \(2P(t\geq |t_c|)\)</li>
+        <li> <h5>Conclusion:</h5>
+            <ul>
+                <li> If test statistic lies in the non-rejection interval, do not reject \(H_0\). Else reject \(H_0\) in favor
+                    of alternative hypothesis to conclude that there is a linear relation between predictor and response variables.
+                    <br> <br>
+                    <h5>OR</h5>
+                </li>
+                <li> If the p-value is larger than \(\alpha \), do not reject \(H_0\). Else reject \(H_0\) in favor of alternative
+                    hypothesis and conclude that there is enough evidence to conclude there is a linear relation between 
+                    predictor and response variables. 
+                </li>
+            </ul>
+        
+        </li>
+    </ol>
+</div>
+
+
+<div>
+    
+</div>
+
+
+
+</div>
+
+{% endblock %}

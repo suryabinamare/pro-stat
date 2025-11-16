@@ -1,0 +1,115 @@
+{% extends "sidebar.html" %}
+{% block title %}Population Proportion  {% endblock %}
+{% block content %}
+
+<div class = "container">
+    <h3>Point Estimation and Confidence Intervals for Two Population Proportions</h3>
+
+    <p class = "left-aligned"> Suppose we have a sample of size \(n_1\) with \(x_1\) successes (or have a 
+        specified attribute) from a population and a sample of size \(n_2\) with \(x_2\) successes 
+        from another population. The sample proportions, \(\hat{p_1} = \frac{x_1}{n_1}\) and 
+        \(\hat{p_2} = \frac{x_2}{n_2}\), are the proportions of successes in their respective samples.
+        The sample proportion, \(\hat{p_1}\), is a random variable that estimates the population proportion, \(p_1\), while
+        \(\hat{p_2}\) estimates population proportion,\(p_2\).
+       <p class = "left-aligned"> The  sampling distribution of difference \(\hat{p_1} - \hat{p_2}\) is approximately normal 
+        if the sample size is large enough, with mean \(\mu_{\hat{p_1} - \hat{p_2}} = p_1 - p_2\) 
+        and standard deviation \(\sigma_{\hat{p_1} - \hat{p_2}} = \sqrt{\frac{p_1(1-p_1)}{n_1} + \frac{p_2(1-p_2)}{n_2}}\).</p>
+
+
+        <h3 class = "left-aligned">Goal:</h3> Estimate the difference in population proportions, \(p_1 - p_2\), using the sample proportions, \(\hat{p_1} - \hat{p_2}\), and construct a confidence interval for this difference.
+        and find confidence interval so that we are \((1-\alpha)%\) confident that the interval contains the true difference \(p_1 - p_2\).
+    </p>
+
+    
+
+    <h4 class = "left-aligned">Steps to Calculate the Confidence Interval</h4>
+    <p>
+        <ol class = "left-aligned">
+            <li>Calculate the sample proportion \(\hat{p_1} = \frac{x_1}{n_1}\).</li>
+            <li>Calculate the sample proportion \(\hat{p_2} = \frac{x_2}{n_2}\).</li>
+            <li>Determine the critical value, \(z_{\alpha/2}\)</li>
+            <li>Compute the standard error, \(se = \sqrt{\frac{\hat{p_1}(1-\hat{p_1})}{n_1} + \frac{\hat{p_2}(1-\hat{p_2})}{n_2}}\).</li>
+            <li> Margin of error, \(me = z_{\alpha/2} \cdot se\)</li>
+            <li>Confidence Interval 
+                \begin{align*} 
+                CI &= 
+                \hat{p}_1 - \hat{p}_2 \pm z_{\alpha/2} \cdot \sqrt{\frac{\hat{p}_1(1-\hat{p}_1)}{n_1} + \frac{\hat{p}_2(1-\hat{p}_2)}{n_2}} \qquad \text{OR} \\
+
+                CI &= \left(\hat{p}_1 - \hat{p}_2 - z_{\alpha/2} \cdot \sqrt{\frac{\hat{p}_1(1-\hat{p}_1)}{n_1} + \frac{\hat{p}_2(1-\hat{p}_2)}{n_2}}, \hat{p}_1 - \hat{p}_2 + z_{\alpha/2} \cdot \sqrt{\frac{\hat{p}_1(1-\hat{p}_1)}{n_1} + \frac{\hat{p}_2(1-\hat{p}_2)}{n_2}}\right). \qquad \text{OR}\\
+                CI &=  \left(\hat{p}_1- \hat{p}_2 - me, \hat{p}_1 - \hat{p}_2 + me\right)
+                \end{align*}
+            </li>
+        </ol>
+      
+
+   
+
+
+   
+
+    <h3>Provide the following values to calculate and plot </h3>
+    <form class="two-column-form" action = "{{ url_for('populationproportion.confidence_interval_two') }}" method="post">
+        <div class="form-grid">
+
+            <div class="form-group">
+                <label for="field1">\(n_1\)</label>
+                <input type="text" id="field1" name="sample_size1" value="{{ sample_size1 or '' }}" required>
+            </div>
+
+            <div class="form-group">
+                <label for="field2"> \(\hat{p_1}\)</label>
+                <input type="text" id="field2" name="sample_proportion1" value="{{ sample_proportion1 or '' }}" required>
+            </div>
+
+            <div class="form-group">
+                <label for="field3"> \(n_2\)</label>
+                <input type="text" id="field3" name="sample_size2" value="{{ sample_size2 or '' }}" required>
+            </div>
+
+            <div class="form-group">
+                <label for="field4">\(\hat{p_2}\)</label>
+                <input type="text" id="field4" name="sample_proportion2" value="{{ sample_proportion2 or '' }}" required>
+            </div>
+
+            <div class="form-group">
+                <label for="field5">\(\alpha\)</label>
+                <input type="text" id="field5" name="alpha" value="{{ alpha or '' }}" required>
+            </div>
+            
+        </div>
+            
+        </br>
+        <div class="submit-button">
+            <input type="submit" value="Click to Display Values">
+        </div>
+    </form>
+      {% if ci_lower is not none and ci_upper is not none %}
+        <div class="container">
+          <h3 class = "left-aligned">Results:</h3>
+          <ul>
+            <li><b> Sample size, \(n_1\) = {{ sample_size1 }}</b></li>
+              <li><b>Sample proportion, \(\hat{p_1}\) = {{ sample_proportion1 }}</b></li>
+              <li><b> Sample size, \(n_2\) = {{ sample_size2 }}</b></li>
+              <li><b>Sample proportion, \(\hat{p_2}\) = {{ sample_proportion2 }}</b></li>
+              <li><b> Significance Level, \(\alpha\) = {{ alpha }}</b></li>
+                <li><b>Critical value \(z_{\alpha/2}\) = {{ z_alpha }}</b></li>
+                <li><b>Standard error, \(se\) = {{ standard_error }}</b></li>
+                <li><b> Margin of error, \(me\)  = {{ margin_of_error }}</b></li>
+                <li><b>Confidence interval, CI  = \(\left( {{ ci_lower }}, {{ ci_upper }} \right)\)</b></li>
+
+          </ul>
+      </div>
+        {% endif %}
+
+    
+     
+
+</div>
+
+
+
+
+
+
+
+{% endblock %}

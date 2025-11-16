@@ -1,0 +1,110 @@
+{% extends "sidebar.html" %}
+{% block content %}
+
+
+<div class = "container">
+<h2>t-Distribution: </h2>
+
+<h3 class = "left-aligned">Information about t-distribution:</h3>
+<p class = "left-aligned">
+The t-distribution is like z-distribution, with the density curve that is bell-shaped symmetric with respect to vertical line through 0.
+The distribution has mean of 0 and stanard deviation of 1. Both tails of the curve extend to infinity. But the tails of 
+t-distribution are thicker than that of z-distribution. 
+</p>
+
+
+
+<p class = "left-aligned">The area under the density curve is 1. P-value represents the area of a region
+    under the curve which is shaded blue.  t-score is plotted along the horizontal axis as the red dot. 
+    Here, 
+    <ul>
+        <li><b> t-score: </b> This is the value of the t-statistic you want to evaluate. This value is plotted 
+            along the horizontal axis as the red dot. You can find the t-score when you know the P-value and the degrees of freedom (df).</li>
+        <li><b> P-value: </b>This value 
+            represents the area under the curve to the right of the t-score and is shaded blue in the plot.
+        For \(t_0\), the p-value is given by \(p(t \leq t_0)\). </br>
+        If you want to find the area to the right of \(t_0\), </br>
+            \(p(t\geq t_0) = 1 - p(t\leq t_0)\)</li>
+
+    </li>
+    </ul> 
+</div>
+
+
+<div class = "container">
+    <h3 class = "left-aligned">Provide the following values:</h3>
+    <ul>
+        <li>
+            <b>Provide t-score and degree of freedom (df) to find P-value (leave P-value box blank)</b>
+        </li>
+        <p> OR </p>
+        <li>
+            <b>Provide P-value and degree of freedom (df) to find t-score (leave t-score box blank)</b>
+        </li>
+    </ul>
+
+    <form class = "two-column-form" action = "{{ url_for('distributions.tdistribution') }}" method="post">
+        
+
+            <div class = "form-grid">
+                <div class = "form-group"> 
+                    <label for="t_given">t-Score:</label>
+                    <input type="number" name="t_given" step="any"><br><br>
+                </div>
+
+                <div class = "form-group"> 
+                    <label for="df">df</label>
+                    <input type="number" name="df" step="any" value="{{ df}}"><br><br>
+                </div>
+
+                <div class = "form-group">
+                <label for="p_given1">P-Value:</label>
+                <input type="number" name="p_given1" step="any"><br>
+                </div>
+            </div>
+            <div class="submit-button">
+                <input type="submit" value="Click to Display Values and Plot">
+            </div>
+            </form>
+</div>
+
+
+
+
+        {% if f_value and plot_fcurve %}
+        <div class = "container">
+            <h3 class = "left-aligned">Results:</h3>
+
+        <h2 style="color: red"> F-score = {{ f_value | round(4) }} </h2> 
+        <h2 style="color: rgb(55, 55, 214)"> P-value = {{param[-1]}}</h2>
+
+        <img src="{{ url_for('static', filename='fcurve.png') }}" alt="F Density Curve">
+        </div>
+    {% endif %}
+           
+        
+
+        <!-- Result section -->
+        
+
+        {% if t_value is defined and p_value is defined and t_value is not none and p_value is not none %}
+        <div class = "container">
+            <h2 style="color: red">t-Score = {{ t_value | round(4) }}</h2>
+             <h2 style="color: rgb(55, 55, 214)"> P-value = {{p_value | round(4)}}</h2>
+            
+            
+        {% endif %}
+
+
+        {% if plot_path1 %}
+            <img src="{{ url_for('static', filename='plot_t.png') }}" alt="t-Distribution Plot">
+        </div>
+        {% endif %}
+
+
+
+
+{% endblock %}
+
+
+

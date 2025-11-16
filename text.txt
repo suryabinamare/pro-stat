@@ -1,0 +1,155 @@
+from flask import Blueprint, render_template, request, current_app, session
+import os
+import pandas as pd
+import pickle
+from werkzeug.utils import secure_filename
+
+statistics_bp = Blueprint("statvalues", __name__, template_folder="../templates")
+
+# Allowed file checker
+def allowed_files(filename):
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in current_app.config['ALLOWED_EXTENSIONS']
+
+# Descriptive Values Calculator
+@statistics_bp.route('/statvalues', methods=["GET", "POST"])
+def statvalues():
+    columns = None
+    stats = None
+    column_selected = None
+    df = None
+
+    if request.method == "POST":
+        # If file is uploaded
+        if 'file' in request.files and request.files['file'].filename != '':
+            file = request.files['file']
+            filename = secure_filename(file.filename)
+            try:
+                if filename.endswith('.csv'):
+                    df = pd.read_csv(file)
+                elif filename.endswith('.xlsx'):
+                    df = pd.read_excel(file)
+                else:
+                    return render_template("stat-values.html", error="Invalid file format. Please upload CSV or XLSX.")
+                # save DataFrame to session as JSON.
+                session['df_json'] = df.to_json()
+                columns = df.columns.tolist()
+            except Exception as e:
+                return render_template('stat-values.html', error = f"Error reading file:{e}")
+            
+        elif 'column' in request.form:
+            column_selected = request.form['column']
+            if 'df_json' not in session:
+                return render_template("stat-values.html", error = "No data loaded. Please upload a file first.")
+            #rebuild dataframe from session
+            df = pd.read_json(session['df_json'])
+            stats = df[column_selected].describe().to_frame().to_html(classes="fancy-table", header="true")
+            columns = df.columns.tolist()
+
+    return render_template(
+        "stat-values.html",
+        columns = columns,
+        stats = stats,
+        column_selected = column_selected
+    )
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Stats App</title>
+    <style>
+        #meanOutput, #boxplotOutput {
+            margin-top: 20px;
+            padding: 10px;
+            border: 1px solid #aaa;
+        }
+    </style>
+</head>
+<body>
+
+<h2>Upload File</h2>
+<input type="file" id="fileInput">
+<button onclick="uploadFile()">Upload</button>
+
+<br><br>
+
+<div id="columnSelectArea"></div>
+
+<button onclick="showMean()">Show Mean</button>
+<button onclick="showBoxplot()">Show Boxplot</button>
+
+<div id="meanOutput"></div>
+<div id="boxplotOutput"></div>
+
+<script>
+function uploadFile() {
+    const file = document.getElementById("fileInput").files[0];
+    const formData = new FormData();
+    formData.append("file", file);
+
+    fetch("/upload", { method: "POST", body: formData })
+        .then(res => res.json())
+        .then(data => {
+            let html = "<h3>Select Column</h3>";
+            html += "<select id='columnSelect'>";
+            data.columns.forEach(c => {
+                html += `<option value="${c}">${c}</option>`;
+            });
+            html += "</select>";
+            document.getElementById("columnSelectArea").innerHTML = html;
+        });
+}
+
+function showMean() {
+    const col = document.getElementById("columnSelect").value;
+
+    fetch("/get_mean", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({ col })
+    })
+    .then(res => res.json())
+    .then(data => {
+        document.getElementById("meanOutput").innerHTML += 
+            `<p><b>Mean of ${col}:</b> ${data.mean}</p>`;
+    });
+}
+
+function showBoxplot() {
+    const col = document.getElementById("columnSelect").value;
+
+    fetch("/get_boxplot", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({ col })
+    })
+    .then(res => res.json())
+    .then(data => {
+        // Display base64 image
+        document.getElementById("boxplotOutput").innerHTML += 
+            `<p><b>Boxplot of ${col}:</b></p>
+             <img src="data:image/png;base64,${data.image}" width="400">`;
+    });
+}
+</script>
+
+</body>
+</html>
+

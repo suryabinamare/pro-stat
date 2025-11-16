@@ -1,0 +1,251 @@
+{% extends "sidebar.html" %}
+{% block title %}One Population Mean{% endblock %}
+{% block content %}
+
+
+<div class = "container">
+<h2>Hypothesis Testing: Comparing two population means</h2>
+<p class = "left-aligned"> We apply sample data and statistical tools to test whether the mean of a single population is equal 
+    to a known or hypothesized value.
+</p>
+
+ <p class = "left-aligned">We consider the difference \(\bar{X_1} - \bar{X_2}\) that estimates 
+        the difference in population means \(\mu_1 - \mu_2\). The random variable \(\bar{X_1} - \bar{X_2}\) follows a normal distribution
+        with mean \(\mu_1 - \mu_2\) and the standard deviation is \(\sqrt{\frac{\sigma_1^2}{n_1} + \frac{\sigma_2^2}{n_2}}\).</br>
+
+        So, \(\displaystyle z = \frac{(\bar{X_1} - \bar{X_2}) - (\mu_1 - \mu_2)}{\sqrt{\frac{\sigma_1^2}{n_1} + \frac{\sigma_2^2}{n_2}}}\) follows
+        a standard normal distribution, where \(\bar{X_1}\) and \(\bar{X_2}\) are the sample means,
+         \(\sigma_1\) and \(\sigma_2\) are the population standard deviations, and \(n_1\) and \(n_2\) are the sample sizes.
+
+        <h4 class = "left-aligned">We consider the following cases to estimate the standard deviations.</h4>
+        <ul> 
+            <li>When two population standard deviations are equal (\(\sigma_1 = \sigma_2 = \sigma\)).
+
+                \begin{align*} 
+                z &= \frac{(\bar{X_1} - \bar{X_2}) - (\mu_1 - \mu_2)}{\sqrt{\left( \frac{\sigma_1^2}{n_1} + \frac{\sigma_2^2}{n_2} \right)}}\\
+                  &= \frac{(\bar{X_1} - \bar{X_2}) - (\mu_1 - \mu_2)}{\sqrt{\sigma^2\left( \frac{1}{n_1} + \frac{1}{n_2} \right)}}\\
+                  &= \frac{(\bar{X_1} - \bar{X_2}) - (\mu_1 - \mu_2)}{\sqrt{s_p^2\left( \frac{1}{n_1} + \frac{1}{n_2} \right)}}\\
+                  &= \frac{(\bar{X_1} - \bar{X_2}) - (\mu_1 - \mu_2)}{s_p\sqrt{\left( \frac{1}{n_1} + \frac{1}{n_2} \right)}}
+
+                \end{align*}
+                Where we estimate the common population standard deviation \(\sigma\) using the sample pooled standard deviation 
+                \(s_p = \sqrt{\frac{(n_1 - 1)s_1^2 + (n_2 - 1)s_2^2}{n_1 + n_2 - 2}}\):
+            Thus, the random variable, 
+                \[t = \frac{(\bar{X_1} - \bar{X_2}) - (\mu_1 - \mu_2)}{s_p\sqrt{\left( \frac{1}{n_1} + \frac{1}{n_2} \right)}}\] 
+                follows a t-distribution with \(n_1 + n_2 - 2\) degrees of freedom.
+                <br>
+        </ul>
+</div>
+
+
+<div class = "container">
+<h3 class = "left-aligned"> Pooled t-test: </h3>
+
+<p class = 'left-aligned'> We state the hypothesis to prove that if two means are equal or one is greater than the other.
+
+
+<ol class = "left-aligned"> 
+    <li>Two-tailed Test: </li>
+    <ul class = "left-aligned">
+        <li>\(H_0 : \quad \mu_1 = \mu_2\)</li>
+        <li>\(H_a : \quad \mu_1 \neq \mu_2\)</li>
+    </ul>
+
+    <li>Left-tailed Test: </li>
+    <ul class = "left-aligned">
+        <li>\(H_0 : \quad \mu_1 = \mu_2\)</li>
+        <li>\(H_a : \quad \mu_1 < \mu_2\)</li>
+    </ul>
+
+    <li>Right-tailed Test: </li>
+    <ul class = "left-aligned">
+        <li>\(H_0 : \quad \mu_1 = \mu_2\)</li>
+        <li>\(H_a : \quad \mu_1 > \mu_2\)</li>
+    </ul>
+</ol>
+
+<p class = "left-aligned">
+Under the null hypothesis, the test statistic is given by (since \(\mu_1  = \mu_2  \)) </br>
+\(
+t_{\text{test}} =\displaystyle \frac{(\bar{X_1} - \bar{X_2}) - (\mu_1 - \mu_2)}{s_p\sqrt{\left( \frac{1}{n_1} + \frac{1}{n_2} \right)}}
+\)
+</p>
+</div>
+
+
+
+
+<div class = "container">
+<h3 class = "left-aligned">We have the following values:</h3>
+    <ul>
+        <li> Sample sizes: \(n_1, n_2\)</li>
+        <li> Sample means: \(\bar{X_1}, \bar{X_2}\)</li>
+        <li> Sample standard deviations: \(s_1, s_2\)</li>
+        <li> Population means: \(\mu_1, \mu_2\)</li>
+        <li> Population standard deviations: \(\sigma_1, \sigma_2\)</li>
+        <li> Difference in population means: \(\mu_1 - \mu_2\)</li>
+        <li> Significance level: \(\alpha\)</li>
+    </ul>
+   
+    <h3 class = "left-aligned">We find the following values:</h3>
+    <ul>
+        <li> Test statistic: \(t_{\text{test}}\)</li>
+        <li> Critical value: \(t_{\text{critical}}\)</li>
+        <li> P-value: \(p\)</li>
+        <li> Confidence Interval: \((\bar{X_1} - \bar{X_2}) \pm ME\)</li>
+    </ul>
+</div>
+
+
+
+<div class = "container">    
+    <h3>Provide the following values to calculate and plot </h3>
+
+    <form class="two-column-form" action = "{{ url_for('populationmean.twopopmeans') }}" method="post">
+        <div class="form-grid">
+
+            <div class="form-group">
+                <label for="field1">Sample mean, \(\bar{X}_1\)</label>
+                <input type="text" id="field1" name="sample_mean1" value="{{ values[0] or '' }}" required>
+            </div>
+
+            <div class="form-group">
+                <label for="field2">Sample mean, \(\bar{X}_2\)</label>
+                <input type="text" id="field2" name="sample_mean2" value="{{ values[1] or '' }}" required>
+            </div>
+
+            <div class="form-group">
+                <label for="field3">Sample size, \(n_1\)</label>
+                <input type="text" id="field3" name="sample_size1" value="{{ values[2] or '' }}" required>
+            </div>
+
+            <div class="form-group">
+                <label for="field4">Sample size, \(n_2\)</label>
+                <input type="text" id="field4" name="sample_size2" value="{{ values[3] or '' }}" required>
+            </div>
+
+            <div class="form-group">
+                <label for="field5">Sample std, \(s_1\)</label>
+                <input type="text" id="field5" name="s1" value="{{ values[4] or '' }}" required>
+            </div>
+
+            <div class="form-group">
+                <label for="field6">Sample std, \(s_2\)</label>
+                <input type="text" id="field6" name="s2" value="{{ values[5] or '' }}" required>
+            </div>
+
+            <div class="form-group">
+                <label for="field7">Significance Level, \(\alpha\)</label>
+                <input type="text" id="field7" name="alpha" value="{{ values[6] or '' }}" required>
+            </div>
+            <div class="form-group">
+                <label for="field8">Df (\(n_1+n_2-2\))</label>
+                <input type="text" id="field8" name="df" value="{{ df or '' }}" required>
+            </div>
+
+        </div>
+
+        <div class = "form-group">
+                <label> Select Hypothesis Type: </label>
+                <select name = "Type" required>
+                    <option value="two-tailed" {% if test_type == "two-tailed" %}selected{% endif %}>Two-tailed</option>
+                    <option value="left-tailed" {% if test_type == "left-tailed" %}selected{% endif %}>Left-tailed</option>
+                    <option value="right-tailed" {% if test_type == "right-tailed" %}selected{% endif %}>Right-tailed</option>
+                </select>
+            </div>
+        </br> </br>
+
+        </br>
+        <div class="submit-button">
+            <input type="submit" value="Click to Display Values">
+        </div>
+    </form>
+</div>
+
+
+
+{% if test_type == 'two-tailed' %}
+    <div class = "container">
+            <div style="display:flex; gap:20px;">
+                <div style="flex:1; border:1px solid black;">
+                    <h3 class = "left-aligned">Computed Values</h3>
+                    <ol>
+                        <li style="color: blue;"><strong>Hypothesis type = </strong>{{ test_type }}</li>
+                        <li class = "left-aligned"> <strong> Critical t-value := \(\pm\){{values[8] }} </strong></li>
+                        <li class = "left-aligned"> <strong> Test Statistic := {{values[7] }}</strong></li>
+                        <li class = "left-aligned"> <strong> P-Value := {{values[9] }}</strong></li>
+                        <li class = "left-aligned"> <strong> Alpha: {{values[6] }}</strong></li>
+                        <li class = "left-aligned"> <strong> Margin of Error: {{me}}</strong></li>
+                        <li class = "left-aligned"> <strong> Confidence Interval: ({{CI[0] }}, {{CI[1] }})</strong></li>
+                    </ol>                 
+                </div>
+        
+                <div style="flex:1; border:1px solid black;">                              
+                    <img src="{{ url_for('static', filename='plot_twopopmeans.png') }}" alt="Density Plot"> 
+                </div>
+            </div>
+    </div>
+{% elif test_type == 'left-tailed' %}
+    <div class = "container">
+    <div style="display:flex; gap:20px;">
+                <div style="flex:1; border:1px solid black;">
+                    <h3 class = "left-aligned">Computed Values</h3>
+                    <ol>
+                        <li style="color: blue;"><strong>Hypothesis type = </strong>{{ test_type }}</li>
+                        <li class = "left-aligned"> <strong> Critical t-value := {{values[8] }} </strong></li>
+                        <li class = "left-aligned"> <strong> Test Statistic := {{values[7] }}</strong></li>
+                        <li class = "left-aligned"> <strong> P-Value := {{values[9] }}</strong></li>
+                        <li class = "left-aligned"> <strong> Alpha: {{values[6] }}</strong></li>
+                        <li class = "left-aligned"> <strong> Margin of Error: {{me}}</strong></li>
+                        <li class = "left-aligned"> <strong> Confidence Interval: ({{CI[0] }}, {{CI[1] }})</strong></li>
+                    </ol>                 
+                </div>
+        
+                <div style="flex:1; border:1px solid black;">                              
+                    <img src="{{ url_for('static', filename='plot_twopopmeans.png') }}" alt="Density Plot"> 
+                </div>
+            </div>
+    </div>
+{% elif test_type == "right-tailed" %}
+    <div class = "container">
+    <div style="display:flex; gap:20px;">
+                <div style="flex:1; border:1px solid black;">
+                    <h3 class = "left-aligned">Computed Values</h3>
+                    <ol>
+                        <li style="color: blue;"><strong>Hypothesis type = </strong>{{ test_type }}</li>
+                        <li class = "left-aligned"> <strong> Critical t-value := {{values[8] }} </strong></li>
+                        <li class = "left-aligned"> <strong> Test Statistic := {{values[7] }}</strong></li>
+                        <li class = "left-aligned"> <strong> P-Value := {{values[9] }}</strong></li>
+                        <li class = "left-aligned"> <strong> Alpha: {{values[6] }}</strong></li>
+                        <li class = "left-aligned"> <strong> Margin of Error: {{me}}</strong></li>
+                        <li class = "left-aligned"> <strong> Confidence Interval: ({{CI[0] }}, {{CI[1] }})</strong></li>
+                    </ol>                 
+                </div>
+        
+                <div style="flex:1; border:1px solid black;">                              
+                    <img src="{{ url_for('static', filename='plot_twopopmeans.png') }}" alt="Density Plot"> 
+                </div>
+            </div>
+    </div>
+{% endif %}    
+
+<div class = "container">
+        <h3 class = "left-aligned">Conclusion:</h3>
+        <ul>
+            <li>Do not reject \(H_0\) if Test Statistic, \(t\) is in the non-rejection interval for test statistic. Else 
+                reject \(H_0\) in favor of alternative hypothesis.
+            </li>
+            <b>OR</b>
+            </br>
+            <li> Do not reject \(H_0\) if P-Value is bigger than Alpha. Else reject \(H_0\) in favor of alternative hypothesis.</li> 
+            <b>OR</b>
+            <li> Do not reject \(H_0\) if the confidence interval contains the null hypothesis value. Else reject \(H_0\) in favor of alternative hypothesis.</li>
+        </ul>
+
+</div>
+
+
+
+
+
+{% endblock %}

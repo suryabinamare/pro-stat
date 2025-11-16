@@ -1,0 +1,189 @@
+
+
+
+{% extends "sidebar.html" %}
+{% block title %} Goodness of Fit Test {% endblock %}
+{% block content %}
+
+
+
+
+
+
+<div class = "container">
+    <h1>
+  <img src="{{ url_for('static', filename='chi-square.png') }}" alt="Icon" style="width:100px; height:100px; vertical-align:middle;">
+  Goodness of Fit Test
+</h1>
+
+
+    <p class = "left-aligned"> A goodness of fit test is a statistical test used to determine how well a set of observed data 
+        matches the expected distribution of a population. It essentially checks whether the sample data comes from a 
+        particular theoretical distribution (such as normal, binomial, or Poisson). By comparing the observed frequencies 
+        with the expected frequencies, the test helps identify if deviations are due to random chance or if they suggest 
+        that the assumed distribution is not a good fit. One of the most commonly used goodness of fit tests is the Chi-square test, 
+        which is widely applied in hypothesis testing and model validation.
+    </p>
+ 
+        <h3 class = "left-aligned">An example:  </h3>  
+
+        <p class = "left-aligned">Suppose we have a six-sided die, and we want to test if it is fair (i.e., each side 
+          has an equal probability of landing face up). We roll the die 150 times and record the following outcomes:
+            <img src = "{{url_for('static', filename = 'die.png')}}" alt = "Die Rolls" width = "200" height = "150">
+            
+
+        <ul>
+            <li><b>Sides : Observed frequencies</b></li>
+            <li>Side 1: 23 times</li>
+            <li>Side 2: 26 times</li>
+            <li>Side 3: 23 times</li>
+            <li>Side 4: 21 times</li>
+            <li>Side 5: 31 times</li>
+            <li>Side 6: 26 times</li>
+        </ul>
+        Do the data provide sufficient evidence to conclude that the die is not fair? The above data  which shows the observed 
+        frequencies of each side of the die after 150 rolls. 
+          <ul> 
+            <li> \(H_0\): The die is fair (i.e., all sides have equal probability)</li>
+            <li> \(H_1\): The die is not fair (i.e., at least one side has a different probability)</li>
+          </ul>
+
+       <p class = "left-aligned"> If the die were fair, we expect equal number of rolls for each side, which would be 150/6 = 25 rolls per side.
+        So expected frequencies are:</p>
+        <ul>
+             <li><b>Sides : Expected frequencies</b></li>
+            <li>Side 1: 25 times</li>
+            <li>Side 2: 25 times</li>
+            <li>Side 3: 25 times</li>
+            <li>Side 4: 25 times</li>
+            <li>Side 5: 25 times</li>
+            <li>Side 6: 25 times</li>
+        </ul>
+        <p class = "left-aligned"> We compare the observed and expected frequencies. If observed frequencies are close to expected frequencies,
+        we may say that the die is fair. If they differ significantly, we may conclude that the die is not fair.
+        We take the difference between observed and expected frequencies for each side:</p>
+        <ul>
+            <li>Side 1: 23 - 25 = -2</li>
+            <li>Side 2: 26 - 25 = 1</li>
+            <li>Side 3: 23 - 25 = -2</li>
+            <li>Side 4: 21 - 25 = -4</li>
+            <li>Side 5: 31 - 25 = 6</li>
+            <li>Side 6: 26 - 25 = 1</li>
+        </ul>
+        <p class = "left-aligned"> We then square these differences to eliminate negative values and emphasize larger discrepancies:
+        </p>
+        <ul>
+            <li>Side 1: (-2)^2 = 4</li>
+            <li>Side 2: (1)^2 = 1</li>
+            <li>Side 3: (-2)^2 = 4</li>
+            <li>Side 4: (-4)^2 = 16</li>
+            <li>Side 5: (6)^2 = 36</li>
+            <li>Side 6: (1)^2 = 1</li>
+        </ul>
+        <p class = "left-aligned"> Then we divide each squared difference by the expected frequency for that side:
+        </p>
+        <ul>
+            <li>Side 1: 4 / 25 = 0.16</li>
+            <li>Side 2: 1 / 25 = 0.04</li>
+            <li>Side 3: 4 / 25 = 0.16</li>
+            <li>Side 4: 16 / 25 = 0.64</li>
+            <li>Side 5: 36 / 25 = 1.44</li>
+            <li>Side 6: 1 / 25 = 0.04</li>
+        </ul>
+
+        <p class = "left-aligned"> Finally, we sum these values to get the chi-square statistic:
+        </p>
+        <ul>
+            <li>Chi-square statistic = 0.16 + 0.04 + 0.16 + 0.64 + 1.44 + 0.04 = 2.48</li>
+        </ul>
+
+        <p class = "left-aligned"> This random variable follows a chi-square distribution with (k - 1) degrees of freedom, where k is
+        the number of categories (sides of the die). In this case, k = 6, so we have 5 degrees of freedom.
+        So, we can compare our chi-square statistic (2.48) to the critical value from the chi-square distribution.
+        For a significance level of 0.05, the critical value is approximately 11.07.
+        Intuitively speaking, as long as our chi-square statistic is less than the critical value,
+        the observed frequencies are close enough to the expected frequencies that we fail to reject the null hypothesis.
+        We conclude that there is not enough evidence to suggest that the die is not fair.
+        More formally, we can say that the p-value associated with our chi-square statistic (2.48) is greater than 0.05,
+        indicating that we do not have sufficient evidence to reject the null hypothesis at the 5% significance level.</p>
+
+        <p class = "left-aligned"> In conclusion, the chi-square goodness of fit test suggests that the die is fair,
+        as the observed frequencies do not significantly differ from the expected frequencies.</p>
+  <h3 class = "left-aligned">Summary</h3>: We summarize the key findings of the chi-square goodness of fit test:
+  <ul>
+      <li>Observed frequencies: [23, 26, 23, 21, 31, 26]</li>
+      <li>Expected frequencies: [25, 25, 25, 25, 25, 25]</li>
+      <li>Chi-square statistic: 2.48</li>
+      <li>Degrees of freedom: 5</li>
+      <li>Critical value (0.05 significance level): 11.07</li>
+      <li>P-value = 0.78</li>
+  </ul>
+
+</div>
+
+
+
+<div class = "container"> 
+
+    <h3>Examples: </h3>
+    <p class = "left-aligned">
+    Below upload a csv or xlsx file with two columns: "observed" and "expected" with observed and expected frequencies respectively.
+    Then, we perform the chi-square goodness of fit test and display the results.</p>
+
+
+    <!-- File Upload Form -->
+    <div class = "form-grid1">
+    <form action="{{ url_for('chisquare.goodnesstest') }}" method="post" enctype="multipart/form-data">
+      
+      <div class="form-group">
+            <input type="file" name="goodness_test" accept=".csv, .xlsx" required>
+        </div>
+        <div class = "form-group">
+          <label for="alpha">Significance Level, \(\alpha\):</label>
+          <input type="number" name="alpha" step="0.01" min="0" max="1" value="{{values[3]}}" required>
+        </div>
+        <div>
+            <button type="submit" class="fancy-button">Upload</button>
+        </div>
+      
+    </form>
+   
+
+
+  {% if values %}
+    <h3>Results:</h3>
+    <ul>
+      <li><b>Chi-square Statistic</b> = {{ values[0] }}</li>
+      <li><b>P-value</b> = {{ values[1] }}</li>
+      <li><b>Critical Value</b>  = {{ values[2] }})</li>
+      <li><b>Significance Level</b> = {{ values[3] }}</li>
+      <li><b>Degrees of Freedom</b> = {{ values[4] }}</li>
+      <li> {{ table_html | safe }}</li>
+    </ul>
+  {% endif %}
+ </div>
+
+
+  {% if error %}
+      <p style="color:red">{{ error }}</p>
+  {% endif %}
+
+
+
+
+
+    
+
+    
+</div>
+
+
+
+
+
+
+
+
+{% endblock %}
+
+

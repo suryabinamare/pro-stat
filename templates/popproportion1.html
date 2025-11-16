@@ -1,0 +1,215 @@
+{% extends "sidebar.html" %}
+{% block title %}Population Proportion  {% endblock %}
+{% block content %}
+
+<div class = "container">
+    <h2>Hypothesis Testing: Single Population Proportion</h2>
+
+    <p class = "left-aligned"> Suppose we have a sample of size \(n\) with \(x\) successes (or have a 
+        specified attribute). The sample proportion, \(\hat{p} = \frac{x}{n}\) is the proportion of successes in the sample.
+        The sample proportion, \(\hat{p}\), is a random variable that estimates the population proportion, \(p\). The
+        distribution of \(\hat{p}\) is approximately normal if the sample size is large enough, with mean \(\mu_{\hat{p}} = p\) 
+        and standard deviation \(\sigma_{\hat{p}} = \sqrt{\frac{p(1-p)}{n}}\).
+    </p>
+    </div>
+
+
+    <div class = "container">
+    <p class = "left-aligned">
+        This test checks whether the proportion of a single population is equal to a known or hypothesized value.
+   
+    <ol>
+        <li class = "left-aligned">Two-tailed Test: </li>
+        <ul>
+            <li>\(H_0 : \quad p = p_0\)</li>
+            <li>\(H_a : \quad p \neq p_0\)</li>
+        </ul>
+   
+
+        <li class = "left-aligned">Left-tailed Test: </li>
+        <ul>
+            <li>\(H_0 : \quad p = p_0\)</li>
+            <li>\(H_a : \quad p < p_0\)</li>
+        </ul>
+    
+        <li class = "left-aligned">Right-tailed Test: </li>
+        <ul>
+            <li>\(H_0 : \quad p = p_0\)</li>
+            <li>\(H_a : \quad p > p_0\)</li>
+        </ul>
+    </ol>
+    </p>
+    </div>
+
+
+
+
+    <div class = "container">
+    <h3 class = "left-aligned">We need these values:</h3>
+    <div class = "multi-column-list">
+        <ul>
+            <li> Sample proportion: \(\hat{p}\) </li>
+            <li> Population proportion: \(p_0\) </li>
+            <li> Sample size: \(n\) </li>
+            <li> Significance Level: \(\alpha\)</li>
+        </ul>
+    </div>
+    </br>
+    <h5 class = "left-aligned">We compute these values:</h5>
+    <div class = "multi-column-list">
+        <ul>
+            <li> Test statistic: \(z_t = \frac{\hat{p}-p_0}{\sqrt{\frac{p_0(1-p_0)}{n}}}\) </li>
+            <li> Critical value: \(z_{\alpha/2} = p(z>z_{\alpha/2}) = \frac{\alpha}{2}\)</li>
+            <li> P-value: 
+                <ul>
+                    <li>\( P = 2*p(z < z_t) \) (two-tailed test)</li>
+                    <li> \( P = p(z < z_t) \) (left-tailed test)</li>
+                    <li> \( P = p(z > z_t ) \) (right-tailed test)</li>
+                </ul>
+            </li>
+            <li> Non-rejection Interval for test statistic: \(\displaystyle \left( -z_{\alpha/2}, z_{\alpha/2}\right)\)</li>
+            
+        </ul>
+    </div>
+    </div>
+
+
+
+
+    <div class = "container">
+
+    <h3 class = "left-aligned">Provide the following values to calculate and plot </h3>
+    <form class="two-column-form" action = "{{ url_for('populationproportion.proportion1') }}" method="post">
+        <div class="form-grid">
+            <div class="form-group">
+                <label for="field1">Pop Proportion: \(p_0\)</label>
+                <input type="text" id="field1" name="pop_proportion" value="{{ pop_proportion or '' }}" required>
+            </div>
+
+            <div class="form-group">
+                <label for="field1">Sample Size: \(n\)</label>
+                <input type="text" id="field1" name="sample_size" value="{{ sample_size or '' }}" required>
+            </div>
+
+            <div class="form-group">
+                <label for="field2"> Sample Proportion: \(\hat{p}\)</label>
+                <input type="text" id="field2" name="sample_proportion" value="{{ sample_proportion or '' }}" required>
+            </div>
+
+            <div class="form-group">
+                <label for="field2"> Significance Level \(\alpha\)</label>
+                <input type="text" id="field2" name="alpha" value="{{ alpha or '' }}" required>
+            </div>
+        </div>
+            <div class = "form-group">
+                <label> Select Hypothesis Type: </label>
+                <select name = "Type" required>
+                    <option value="two-tailed" {% if test_type == "two-tailed" %}selected{% endif %}>Two-tailed</option>
+                    <option value="left-tailed" {% if test_type == "left-tailed" %}selected{% endif %}>Left-tailed</option>
+                    <option value="right-tailed" {% if test_type == "right-tailed" %}selected{% endif %}>Right-tailed</option>
+                </select>
+            </div>
+        </br> </br>
+        <div class="submit-button">
+            <input type="submit" value="Click to Display Values and Plot">
+        </div>
+    </form>
+    </div>
+
+
+
+
+      {% if test_type=='two-tailed' %}
+        <div class="container">
+            <div style="display:flex; gap:20px;">
+            <div style="flex:1; border:1px solid black;">
+          <h3 class = "left-aligned">Results:</h3>
+          <ul>
+            <li>Hypothesis type = {{ test_type }}</li>
+              <li>Test statistic (z) = {{ z }}</li>
+              <li>Non-rejection Interval for test statistic = ({{ -z_alpha }}, {{ z_alpha }})</li>
+              <li>Critical value  = \(\pm\){{z_alpha }}</li>
+              <li>P-value = {{ p_value }}</li>
+              
+          </ul>
+            </div>
+            <div style="flex:1; border:1px solid black;"></div>
+                <img src="{{ url_for('static', filename='prop_twosided.png') }}" alt="Density Plot">
+        </div>
+        </div>
+        </div>
+
+
+
+
+
+        {% elif test_type == "left-tailed" %}
+            <div class="container">
+                <div style="display:flex; gap:20px;">
+            <div style="flex:1; border:1px solid black;">
+          <h3 class = "left-aligned">Results:</h3>
+          <ul>
+            <li>Hypothesis type = {{ test_type }}</li>
+              <li>Test statistic (z) = {{ z }}</li>
+              <li>Non-rejection Interval for test statistic = ({{ -z_alpha }}, {{ z_alpha }})</li>
+              <li>Critical value  = {{z_alpha }}</li>
+              <li>P-value = {{ p_value }}</li>
+              
+          </ul>
+            </div>
+            <div style="flex:1; border:1px solid black;">
+      
+                <img src="{{ url_for('static', filename='prop_twosided.png') }}" alt="Density Plot">
+            </div>
+        </div>
+        </div>
+
+
+        {% elif test_type == "right-tailed" %}
+        <div class="container">
+            <div style="display:flex; gap:20px;">
+            <div style="flex:1; border:1px solid black;">
+          <h3 class = "left-aligned">Results:</h3>
+          <ul>
+            <li>Hypothesis type = {{ test_type }}</li>
+              <li>Test statistic (z) = {{ z }}</li>
+              <li>Non-rejection Interval for test statistic = ({{ -z_alpha }}, {{ z_alpha }})</li>
+              <li>Critical value  = {{z_alpha }}</li>
+              <li>P-value = {{ p_value }}</li>
+              
+          </ul>
+            </div>
+            <div style="flex:1; border:1px solid black;">
+      
+                <img src="{{ url_for('static', filename='prop_twosided.png') }}" alt="Density Plot">
+            </div>
+        </div>
+        </div>
+            
+            
+        {% endif %}
+
+
+      <div class = "container">
+        <h3 class = "left-aligned">Conclusion:</h3>
+        <ul>
+            <li>Do not reject \(H_0\) if Test Statistic, \(z_{test}\) is in the non-rejection interval else reject \(H_0\) in 
+                favor of alternative hypothesis.
+            </li>
+            <b class = "alternative"> OR </b>
+            </br>
+            <li> Do not reject \(H_0\) if P-Value is bigger than \(\alpha\) else reject \(H_0\) in favor of alternative hypothesis.</li>
+            
+        </ul>
+    </div>
+  
+
+</div>
+
+
+
+
+
+
+
+{% endblock %}

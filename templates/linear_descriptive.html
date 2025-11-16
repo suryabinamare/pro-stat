@@ -1,0 +1,173 @@
+
+{% extends "sidebar.html" %}
+{% block title %} Linear Regression {% endblock %}
+
+{% block extra_css %}
+<style>
+  body { font-family: Arial, sans-serif; padding: 20px; }
+  .pair { margin-bottom: 10px; }
+  input { width: 70px; margin-right: 5px; }
+  button { margin-top: 10px; padding: 5px 10px; cursor: pointer; }
+  .result { margin-top: 20px; font-weight: bold; color: darkblue; }
+  img { margin-top: 20px; border: 1px solid #ccc; max-width: 100%; }
+</style>
+{% endblock %}
+
+
+
+
+
+{% block content %}
+
+
+
+
+<div class = "container">
+  <h3>Linear Regression: Descriptive Approach</h3>
+<p class = "left-aligned">
+  
+    <strong>Linear regression</strong> is a statistical method used to model the relationship between a dependent variable and one or more 
+    independent variables. It assumes a linear relationship, meaning the change in the dependent variable is proportional 
+    to the change in the independent variable(s). In its simplest form-simple linear regression-it fits a straight line to
+     the data to predict outcomes. This technique is widely used in data analysis and machine learning for tasks like 
+     forecasting, trend analysis, and understanding variable relationships.
+One of the key aspects of linear regression is the calculation of the best-fit line, which minimizes the sum of the squares 
+of the vertical distances (residuals) between the observed data points and the line itself. This method is known as 
+"Ordinary Least Squares" (OLS).
+Suppose the dataset is \({(x_1,y_1 ),(x_2,y_2 ),…,(x_n,y_n )}\), where \(x\) is the predictor variable and y the response variable. 
+The equation of the best-fit line can be expressed as
+\[\hat{y}=mx+b,\]
+where \(m\) is the slope and b is the y-intercept. The sample data points \(( x_i,y_i )\) and predicted data points \(( x_i,\hat{y}_i )\)
+ are plotted as blue and red respectively below. For each \(x_i\), the error is \((y_i-\hat{y}_i )\), which is the vertical distance 
+ between red dot and blue dot. Since some blue dots lie above the line, while others lie below the line, the error could
+  be positive as well as negative.
+
+
+
+To account negative errors, we take the sum of squares of all errors, which is denoted by SSE.
+
+\[
+\begin{aligned}
+\mathrm{SSE} & =\left(y_{1}-\hat{y}_{i}\right)^{2}+\left(y_{2}-\hat{y}_{2}\right)^{2}+\cdots+\left(y_{n}-\hat{y}_{n}\right)^{2}=\sum_{i=1}^{n}\left(y_{i}-\hat{y}_{n}\right)^{2} \\
+& =\sum_{i=1}^{n}\left(y_{i}-\left(m x_{i}+b\right)\right)^{2} \\
+& =\sum_{i=1}^{n}\left(y_{i}-m x_{i}-b\right)^{2}
+\end{aligned}
+\]
+
+SSE is a function of two variables; $m$ and $b$. Note that $x_{i}$ and $y_{i}$ are given data points. Using multivariate calculus, we take partial derivatives of $S S E$ and set each to zero and solve for slope and intercept.
+
+\[
+\begin{aligned}
+& \text { Partial derivative w.r.t } m=\frac{\partial S S E}{\partial m}=\sum_{i=1}^{n} 2\left(y_{i}-m x_{i}-b\right) . x_{i} \\
+& \text { Partial derivative w.r.t } b=\frac{\partial S S E}{\partial b}=\sum_{i=1}^{n} 2\left(y_{i}-m x_{i}-b\right)(-1)
+\end{aligned}
+\]
+
+Setting both partial derivatives to zero and after simplifying, we get the followng values.
+
+<ul>
+  <li> Mean of \(x: \bar{x}=\frac{1}{n} \sum_{i=1}^{n} x_{i}\)</li>
+  <li> Mean of \(y: \bar{y}=\frac{1}{n} \sum_{i=1}^{n} y_{i}\)</li>
+  <li> \(S_{x x}=\sum_{i=1}^{n}\left(x_{i}-\bar{x}\right)^{2} = \displaystyle \sum_{i=1}^nx_i^2 - \frac{\left(\sum_{i=1}^nx_i \right)^2}{n}\)</li>
+  <li> \(S_{y y}=\sum_{i=1}^{n}\left(y_{i}-\bar{y}\right)^{2} = \displaystyle \sum_{i=1}^ny_i^2 - \frac{\left(\sum_{i=1}^ny_i \right)^2}{n}\)</li>
+  <li> \(S_{x y}=\sum_{i=1}^{n}\left(x_{i}-\bar{x}\right)\left(y_{i}-\bar{y}\right)
+       = \displaystyle \sum_{i=1}^nx_iy_i - \frac{\left(\sum_{i=1}^nx_i \right)\left(\sum_{i=1}^ny_i \right)}{n}\)</li>
+  <li> Slope: \(m=\frac{S_{x y}}{S_{x x}}\)</li>
+  <li> Intercept: \(b=\bar{y}-m \bar{x}\)</li>
+  <li> Coefficient of Determination: \(R^{2}=\frac{S_{x y}^{2}}{S_{x x} S_{y y}}\)</li>
+  <li> Correlation Coefficient: \(r=\sqrt{R^{2}}\)</li>
+  <li> Standard Error of Estimate, \(s_e = \displaystyle \sqrt{\frac{SSE}{n-2}}\) </li>
+</ul>
+
+
+</p>
+</div>
+
+
+
+
+
+
+
+
+
+<div class="container">
+  <h1>Linear Regression Data Input</h1>
+  <div class = "two-columns">
+    <div class = "column">
+      <h3>Type values of \(x\) and \(y\)</h3>
+      <form action="{{ url_for('linear.descriptive') }}" method="POST">
+        <div id="pairs">
+          <div class="pair">
+            <input type="number" step = "any" name="x[]" placeholder="x1" required>
+            <input type="number" step = "any" name="y[]" placeholder="y1" required>
+          </div>
+        </div>
+
+        <button type="button" onclick="addPair()">+ Add More</button>
+        <br><br>
+
+        <button type="submit" name="action" value="plot">Show Plot and Equation</button>
+      </form>
+    </div>
+    <div class = "column">
+      <h3> Or Upload an excel file (first col, x and second col, y) </h3>
+      <form action = "{{ url_for('linear.descriptive') }}" method = "POST" enctype = "multipart/form-data">
+        <input type = "file" name = "file" accept = ".csv, .xlsx, .xls" required>
+        <button type = "submit" name = "action" value = "plot1">Upload and Plot</button>
+      </form>
+    </div>
+
+
+
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+{% if plot_url %}
+<div class = "container">
+  <p class = "left-aligned" style = "font-size: 30px;">Regression Equation: \({{ equation }}\)</p>
+<div class="plot-container">
+  
+  <img src="data:image/png;base64,{{ plot_url }}" alt="Scatterplot with Regression Line" class = "responsive-plot">
+</div>
+
+
+{% endif %}
+
+
+<div class = "table-container">
+{% if values %}
+
+<h4> Computed Values </h4>
+  {{ values|safe }}
+{% endif %}
+
+</div>
+{% endblock %}
+
+
+{% block extra_js %}
+<script>
+  let count = 1;
+  function addPair() {
+    count++;
+    const pairsDiv = document.getElementById("pairs");
+    const newDiv = document.createElement("div");
+    newDiv.classList.add("pair");
+    newDiv.innerHTML = `
+      <input type="number" step = "any" name="x[]" placeholder="x${count}" required>
+      <input type="number" step = "any" name="y[]" placeholder="y${count}" required>
+    `;
+    pairsDiv.appendChild(newDiv);
+  }
+</script>
+
+{% endblock %}

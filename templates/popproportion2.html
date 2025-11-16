@@ -1,0 +1,225 @@
+{% extends "sidebar.html" %}
+{% block title %}Population Proportion  {% endblock %}
+{% block content %}
+
+<div class = "container">
+    <h2>Hypothesis Testing: Two Population Proportions </h2>
+
+    <p class = "left-aligned"> Suppose we have two samples, each of size \(n_1\) and \(n_2\), with \(x_1\) and \(x_2\) successes (or have a 
+        specified attribute) in two populations. The sample proportions, \(\hat{p_1} = \frac{x_1}{n_1}\) and \(\hat{p_2} = \frac{x_2}{n_2}\), are the 
+        proportions of successes in each sample. So we compare two proportions from two different populations, that 
+        have the same attribute. 
+        Since the sample proportions, \(\hat{p_1}\) and \(\hat{p_2}\), are random variables that estimate the population proportions, 
+        \(p_1\) and \(p_2\). The difference between the two sample proportions, \(\hat{p_1} - \hat{p_2}\), is also a random variable that
+        is expected to estimate \(p_1 - p_2\). The distribution of \(\hat{p_1} - \hat{p_2}\) is approximately normal if the sample sizes are large enough, with mean 
+        \(\mu_{\hat{p_1} - \hat{p_2}} = p_1 - p_2\) 
+        and standard deviation \(\sigma_{\hat{p}_1 - \hat{p}_2} = \sqrt{\frac{p_1(1-p_1)}{n_1} + \frac{p_2(1-p_2)}{n_2}}\).
+    </br>
+        We need to consider large sample sizes so that the sampling distribution of the difference in sample proportions is approximately normal.
+        Sample sizes are considered large enough if:  \(n_1\hat{p_1} \geq 5\), \(n_1(1-\hat{p_1}) \geq 5\), 
+        \(n_2\hat{p_2} \geq 5\), and \(n_2(1-\hat{p_2}) \geq 5\).
+    </p>
+
+
+    </div>
+
+
+
+<div class = "container">
+    <h3>Test Types</h3>
+    <ol>
+        <li class = "left-aligned"><b>Two-tailed Test:</b> </li>
+        <ul>
+            <li>\(H_0 : \quad p_1 = p_2\) or \(p_1-p_2 = 0\)</li>
+            <li>\(H_a : \quad p_1 \neq p_2\) or \(p_1-p_2 \neq 0\)</li>
+        </ul>
+   
+
+        <li class = "left-aligned"><b>Left-tailed Test:</b> </li>
+        <ul>
+            <li>\(H_0 : \quad p_1 = p_2\) or \(p_1-p_2 = 0\)</li>
+            <li>\(H_a : \quad p_1 < p_2\) or \(p_1-p_2 < 0\)</li>
+        </ul>
+
+        <li class = "left-aligned"><b>Right-tailed Test:</b> </li>
+        <ul>
+            <li>\(H_0 : \quad p_1 = p_2\) or \(p_1-p_2 = 0\)</li>
+            <li>\(H_a : \quad p_1 > p_2\) or \(p_1-p_2 > 0\)</li>
+        </ul>
+    </ol>
+    </div>
+    
+
+
+<div class = "container">
+    <p class = "left-aligned">
+    Under the null hypothesis, the difference in sample proportions is expected to be zero, the z variable becomes:
+        \begin{align*} z &= \frac{(\hat{p_1} - \hat{p_2}) - (p_1-p_2)}{\sqrt{p_1(1-p_1)/n_1 + p_2(1-p_2)/n_2}} \\
+         &= \frac{\hat{p_1} - \hat{p_2}}{\sqrt{p_1(1-p_1)/n_1 + p_2(1-p_2)/n_2}} \qquad \text{since} \qquad p_1=p_2 \\
+         &= \frac{\hat{p_1} - \hat{p_2}}{\sqrt{p(1-p)(1/n_1 + 1/n_2)}}
+         \end{align*}
+        where \( p = \displaystyle \frac{x_1 + x_2}{n_1 + n_2} \) is the pooled sample proportion.
+    </p>
+</div>
+   
+     
+<div class = "container">
+    <h3>Provide the following values to calculate and plot </h3>
+    <form class="two-column-form" action = "{{ url_for('populationproportion.proportion2') }}" method="post">
+        <div class="form-grid">
+            <div class="form-group">
+                <label for="field1">Sample size: \(n_1\)</label>
+                <input type="text" id="field1" name="sample1" value="{{ sample1 or '' }}" required>
+            </div>
+
+            <div class="form-group">
+                <label for="field1">Sample Size: \(n_2\)</label>
+                <input type="text" id="field1" name="sample2" value="{{ sample2 or '' }}" required>
+            </div>
+
+            <div class="form-group">
+                <label for="field1">successes: \(x_1\)</label>
+                <input type="text" id="field1" name="success1" value="{{ success1 or '' }}" required>
+            </div>
+
+            <div class="form-group">
+                <label for="field1">Successes: \(x_2\)</label>
+                <input type="text" id="field1" name="success2" value="{{ success2 or '' }}" required>
+            </div>
+
+            <div class="form-group">
+                <label for="field2"> Sample Prop: \(\hat{p}_1\)</label>
+                <input type="text" id="field2" name="sample_proportion1" value="{{ sample_proportion1 or '' }}" required>
+            </div>
+
+            <div class="form-group">
+                <label for="field2"> Sample Prop: \(\hat{p}_2\)</label>
+                <input type="text" id="field2" name="sample_proportion2" value="{{ sample_proportion2 or '' }}" required>
+            </div>
+
+            <div class="form-group">
+                <label for="field2"> Significance Level \(\alpha\)</label>
+                <input type="text" id="field2" name="alpha" value="{{ alpha or '' }}" required>
+            </div>
+        </div>
+            <div class = "form-group">
+                <label> Select Hypothesis Type: </label>
+                <select name = "Type" required>
+                    <option value="two-tailed" {% if test_type == "two-tailed" %}selected{% endif %}>Two-tailed</option>
+                    <option value="left-tailed" {% if test_type == "left-tailed" %}selected{% endif %}>Left-tailed</option>
+                    <option value="right-tailed" {% if test_type == "right-tailed" %}selected{% endif %}>Right-tailed</option>
+                </select>
+            </div>
+        </br> </br>
+        <div class="submit-button">
+            <input type="submit" value="Click to Display Values and Plot">
+        </div>
+    </form>
+</div>
+
+
+
+
+
+
+
+
+    {% if test_type=='two-tailed' %}
+    <div class="container">
+        
+        <div style="display:flex; gap:20px;">
+            <div style="flex:1; border:1px solid black;">
+          <h3 class = "left-aligned">Results:</h3>
+          <ul>
+            <li style="color: blue;">Hypothesis type = {{ test_type }}</li>
+            <li>Sample Size 1: \(n_1\) = {{ sample1 }}</li>
+            <li>Sample Size 2: \(n_2\) = {{ sample2 }}</li>
+            <li>Successes 1: \(x_1\) = {{ success1 }}</li>
+            <li>Successes 2: \(x_2\) = {{ success2 }}</li>
+            <li> Sample proportion: \(\hat{p}_1 = {{sample_proportion1}}\)</li>
+            <li> Sample proportion: \(\hat{p}_2 = {{sample_proportion2}}\)</li>
+            <li> Pooled sample proportion: \(\hat{p}\) = {{ p }}</li>
+            <li>Test statistic (z) = {{ z }}</li>
+            <li>Critical value  = \(\pm\){{z_alpha}}</li>
+            <li>Alpha, \(\alpha\) = {{ alpha }}</li>
+            <li> P-value = {{ p_value }}</li>
+        </ul>
+            </div>
+            <div style="flex:1; border:1px solid black;">
+      
+                <img src="{{ url_for('static', filename='twoproportions.png') }}" alt="Density Plot">
+            </div>
+        </div>
+    </div>
+
+
+    {% elif test_type == "left-tailed" %}
+        <div class="container">
+        <div style="display:flex; gap:20px;">
+            <div style="flex:1; border:1px solid black;">
+          <h3 class = "left-aligned">Results:</h3>
+          <ul>
+            <li style="color: blue;">Hypothesis type = {{ test_type }}</li>
+            <li>Sample Size : \(n_1\) = {{ sample1 }}</li>
+            <li>Sample Size : \(n_2\) = {{ sample2 }}</li>
+            <li>Successes : \(x_1\) = {{ success1 }}</li>
+            <li>Successes : \(x_2\) = {{ success2 }}</li>
+            <li> Sample proportion: \(\hat{p}_1 = {{p_hat1}}\)</li>
+            <li> Sample proportion: \(\hat{p}_2 = {{p_hat2}}\)</li>
+            <li> Pooled sample proportion: \(\hat{p}\) = {{ p }}</li>
+            <li>Test statistic (z) = {{ z }}</li>
+            <li>Critical value  = {{z_alpha }}</li>
+            <li>Alpha, \(\alpha\) = {{ alpha }}</li>
+            <li> P-value = {{ p_value }}</li>
+          </ul>
+            </div>
+            <div style="flex:1; border:1px solid black;">
+                <img src="{{ url_for('static', filename='twoproportions.png') }}" alt="Density Plot">
+            </div>
+        </div>
+        </div>
+    {% elif test_type == "right-tailed" %}
+        <div class="container">
+        <div style="display:flex; gap:20px;">
+            <div style="flex:1; border:1px solid black;">   
+          <h3 class = "left-aligned">Results:</h3>
+          <ul>
+            <li style="color: blue;">Hypothesis type = {{ test_type }}</li>
+            <li>Sample Size : \(n_1\) = {{ sample1 }}</li>
+            <li>Sample Size : \(n_2\) = {{ sample2 }}</li>
+            <li>Successes : \(x_1\) = {{ success1 }}</li>
+            <li>Successes : \(x_2\) = {{ success2 }}</li>
+            <li> Sample proportion: \(\hat{p}_1 = {{p_hat1}}\)</li>
+            <li> Sample proportion: \(\hat{p}_2 = {{p_hat2}}\)</li>
+            <li> Pooled sample proportion: \(\hat{p}\) = {{ p }}</li>
+            <li>Test statistic (z) = {{ z }}</li>
+            <li>Critical value  = {{z_alpha }}</li>
+            <li>Alpha, \(\alpha\) = {{ alpha }}</li>
+            <li> P-value = {{ p_value }}</li>
+          </ul>
+            </div>
+            <div style="flex:1; border:1px solid black;">
+      
+                <img src="{{ url_for('static', filename='twoproportions.png') }}" alt="Density Plot">
+            </div>
+        </div>  
+        </div>
+    {% endif %}
+
+
+    
+    <div class = "container">
+        <h3 class = "left-aligned">Conclusion:</h3>
+        <ul>
+            <li>Do not reject \(H_0\) if Test Statistic, \(z_{test}\) is in the non-rejection interval else reject \(H_0\) in 
+                favor of alternative hypothesis.
+            </li>
+            <b class = "alternative"> OR </b>
+            </br>
+            <li> Do not reject \(H_0\) if P-Value is bigger than \(\alpha\) else reject \(H_0\) in favor of alternative hypothesis.</li>
+            
+        </ul>
+    </div>
+
+
+{% endblock %}

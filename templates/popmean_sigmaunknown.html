@@ -1,0 +1,230 @@
+{% extends "sidebar.html" %}
+{% block title %}One Population Mean{% endblock %}
+{% block content %}
+
+
+
+<div class = "container">
+<h2>Hypothesis Testing: Single Population Mean (unknown variance)</h2>
+<p class = "left-aligned"> We apply sample data and statistical tools to test whether the mean of a single population is equal 
+    to a known or hypothesized value.
+</p>
+
+<h5 class = "left-aligned"> When population standard deviation, \(\sigma\) unknown: </h5>
+
+<ol class = "left-aligned"> 
+    <li>Two-tailed Test: </li>
+    <ul class = "left-aligned">
+        <li>\(H_0 : \quad \mu = \mu_0\)</li>
+        <li>\(H_a : \quad \mu \neq \mu_0\)</li>
+    </ul>
+
+    <li>Left-tailed Test: </li>
+    <ul class = "left-aligned">
+        <li>\(H_0 : \quad \mu = \mu_0\)</li>
+        <li>\(H_a : \quad \mu < \mu_0\)</li>
+    </ul>
+
+    <li>Right-tailed Test: </li>
+    <ul class = "left-aligned">
+        <li>\(H_0 : \quad \mu = \mu_0\)</li>
+        <li>\(H_a : \quad \mu > \mu_0\)</li>
+    </ul>
+</ol>
+</div>
+
+<div class = "container">
+    <h3 class = "left-aligned">We need these values:</h3>
+    <div class = "multi-column-list">        
+            <ul>
+                <li> Sample mean: \(\bar{X}\) </li>
+                <li> Population mean: \(\mu_0\) </li>
+                <li> Sample size: \(n\) </li>
+                <li> Sample std: \(s\) </li>
+                <li> Significance level: \(\alpha\)</li>
+                <li> Degrees of freedom: \(df = n - 1\)</li>
+            </ul>
+    </div>
+     <h3 class = "left-aligned">We find the following values:</h3>
+    <div class = "multi-column-list">        
+            <ul>
+                <li> Test Statistic, \(T\) = \( \frac{\bar{X} - \mu_0}{s / \sqrt{n}} \) </li>
+                <li> P-value = \( P(T < t) \) for left-tailed, \( P(T > t) \) for right-tailed, and \( 2 \cdot P(T > |t|) \) for two-tailed tests.</li>
+                <li>Critical Values: 
+                    <ul>
+                        <li>\(\pm t_{\alpha/2}\) for two-tailed test</li>
+                        <li> \( t_{\alpha} \) for right-tailed test</li>
+                        <li> -\( t_{\alpha} \) for left-tailed test</li>
+                    </ul>
+                </li>
+                <li> Confidence Interval for population mean, \(\mu_0\):
+                    <ul>
+                        <li>CI =\( \left(\bar{X} - t_{\alpha/2} \cdot \frac{s}{\sqrt{n}}, \bar{X} + t_{\alpha/2} \cdot \frac{s}{\sqrt{n}}\right) \)
+                            for two-tailed test.
+                        </li>
+                        <li> CI = \( (\bar{X} - t_{\alpha} \cdot \frac{s}{\sqrt{n}}, none) \)
+                            for right-tailed test.
+                        </li>
+                        <li> CI = \(\left(none, \bar{X} + t_{\alpha} \cdot \frac{s}{\sqrt{n}}\right) \)
+                            for left-tailed test.
+                        </li>
+                    </ul>
+            </ul>
+    </div>
+</div>
+
+
+<div class = "container">
+    <h3>Provide the following values to calculate and plot </h3>
+
+    <form class="two-column-form" action = "{{ url_for('populationmean.sigmaunknown') }}" method="post">
+        <div class="form-grid">
+
+            <div class="form-group">
+                <label for="field1">Sample mean, \(\bar{X}\)</label>
+                <input type="text" id="field1" name="sample_mean" value="{{ values[0] or '' }}" required>
+            </div>
+
+            <div class="form-group">
+                <label for="field2">Population mean, \(\mu_0\)</label>
+                <input type="text" id="field2" name="population_mean" value="{{ values[1] or '' }}" required>
+            </div>
+
+            <div class="form-group">
+                <label for="field3">Sample size, \(n\)</label>
+                <input type="text" id="field3" name="sample_size" value="{{ values[2] or '' }}" required>
+            </div>
+
+            <div class="form-group">
+                <label for="field4">Sample std, \(s\)</label>
+                <input type="text" id="field4" name="s" value="{{ values[3] or '' }}" required>
+            </div>      
+
+            <div class="form-group">
+                <label for="field5">Significance Level, \(\alpha\)</label>
+                <input type="text" id="field5" name="alpha" value="{{ values[4] or '' }}" required>
+            </div>
+            <div class="form-group">
+                <label for="field5">Df</label>
+                <input type="text" id="field5" name="df" value="{{ df or '' }}" required>
+            </div>
+
+        </div>
+
+        <div class = "form-group">
+                <label> Select Hypothesis Type: </label>
+                <select name = "Type" required>
+                    <option value="two-tailed" {% if test_type == "two-tailed" %}selected{% endif %}>Two-tailed</option>
+                    <option value="left-tailed" {% if test_type == "left-tailed" %}selected{% endif %}>Left-tailed</option>
+                    <option value="right-tailed" {% if test_type == "right-tailed" %}selected{% endif %}>Right-tailed</option>
+                </select>
+            </div>
+        </br> </br>
+
+        </br>
+        <div class="submit-button">
+            <input type="submit" value="Click to Display Values">
+        </div>
+    </form>
+    </div>
+            
+
+    
+
+
+    
+            
+{% if test_type == 'two-tailed'%}
+    <div class = "container">
+
+            <div style="display:flex; gap:20px;">
+                <div style="flex:1; border:1px solid black;">
+                    <h3 class = "left-aligned">Computed Values</h3>
+                    <ol>
+                        <li class = "left-aligned"> <strong> Sample Mean: = {{values[0]}}</strong></li>
+                        <li class = "left-aligned"> <strong> Pop. Mean: = {{values[1]}}</strong></li>
+                        <li class = "left-aligned"> <strong> Sample Size := {{values[2] }}</strong></li>
+                        <li class = "left-aligned"><strong> Sample std: = {{values[3] }}</strong></li>
+                        <li class = "left-aligned"> <strong> Df: = {{df }}</strong></li>
+                        <li class = "left-aligned"> <strong> Critical t-value := \(\pm\){{values[6] }} </strong></li>
+                        <li class = "left-aligned"> <strong> Test Statistic := {{values[5] }}</strong></li>
+                        <li class = "left-aligned"> <strong> P-Value := {{values[7] }}</strong></li>
+                        <li class = "left-aligned"> <strong> Alpha: {{values[4] }}</strong></li>
+                        <li class = "left-aligned"> <strong> Confidence Interval: ({{CI[0] }}, {{CI[1] }})</strong></li>
+                    </ol>                 
+                </div>
+        
+                <div style="flex:1; border:1px solid black;">                              
+                    <img src="{{ url_for('static', filename='plot_sigmaunknown.png') }}" alt="Density Plot"> 
+                </div>
+            </div>
+    </div>
+{% elif test_type == 'left-tailed' %}
+    <div class = "container">
+    <div style="display:flex; gap:20px;">
+                <div style="flex:1; border:1px solid black;">
+                    <h3 class = "left-aligned">Computed Values</h3>
+                    <ol>
+                        <li class = "left-aligned"> <strong> Sample Mean: = {{values[0]}}</strong></li>
+                        <li class = "left-aligned"> <strong> Pop. Mean: = {{values[1]}}</strong></li>
+                        <li class = "left-aligned"> <strong> Sample Size := {{values[2] }}</strong></li>
+                        <li class = "left-aligned"><strong> Sample std: = {{values[3] }}</strong></li>
+                        <li class = "left-aligned"> <strong> Df: = {{df }}</strong></li>
+                        <li class = "left-aligned"> <strong> Critical t-value := {{values[6] }} </strong></li>
+                        <li class = "left-aligned"> <strong> Test Statistic := {{values[5] }}</strong></li>
+                        <li class = "left-aligned"> <strong> P-Value := {{values[7] }}</strong></li>
+                        <li class = "left-aligned"> <strong> Alpha: {{values[4] }}</strong></li>
+                        <li class = "left-aligned"> <strong> Confidence Interval: ({{CI[0] }}, {{CI[1] }})</strong></li>
+                    </ol>                 
+                </div>
+        
+                <div style="flex:1; border:1px solid black;">                              
+                    <img src="{{ url_for('static', filename='plot_sigmaunknown.png') }}" alt="Density Plot"> 
+                </div>
+            </div>
+    </div>
+{% elif test_type == "right-tailed" %}
+    <div class = "container">
+    <div style="display:flex; gap:20px;">
+                <div style="flex:1; border:1px solid black;">
+                    <h3 class = "left-aligned">Computed Values</h3>
+                    <ol>
+                        <li class = "left-aligned"> <strong> Sample Mean: = {{values[0]}}</strong></li>
+                        <li class = "left-aligned"> <strong> Pop. Mean: = {{values[1]}}</strong></li>
+                        <li class = "left-aligned"> <strong> Sample Size := {{values[2] }}</strong></li>
+                        <li class = "left-aligned"><strong> Sample std: = {{values[3] }}</strong></li>
+                        <li class = "left-aligned"> <strong> Df: = {{df }}</strong></li>
+                        <li class = "left-aligned"> <strong> Critical t-value := {{values[6] }} </strong></li>
+                        <li class = "left-aligned"> <strong> Test Statistic := {{values[5] }}</strong></li>
+                        <li class = "left-aligned"> <strong> P-Value := {{values[7] }}</strong></li>
+                        <li class = "left-aligned"> <strong> Alpha: {{values[4] }}</strong></li>
+                        <li class = "left-aligned"> <strong> Confidence Interval: ({{CI[0] }}, {{CI[1] }})</strong></li>
+                    </ol>                 
+                </div>
+        
+                <div style="flex:1; border:1px solid black;">                              
+                    <img src="{{ url_for('static', filename='plot_sigmaunknown.png') }}" alt="Density Plot"> 
+                </div>
+            </div>
+    </div>
+{% endif %}
+
+
+
+
+
+<div class = "container">
+        <h3 class = "left-aligned">Conclusion:</h3>
+        <ul>
+            <li>Do not reject \(H_0\) if Test Statistic, \(t\) is in the non-rejection interval for test statistic. Else 
+                reject \(H_0\) in favor of alternative hypothesis.
+            </li>
+            <b>OR</b>
+            </br>
+            <li> Do not reject \(H_0\) if P-Value is bigger than Alpha. Else reject \(H_0\) in favor of alternative hypothesis.</li> 
+            <b>OR</b>
+            <li> Do not reject \(H_0\) if the confidence interval contains the null hypothesis value. Else reject \(H_0\) in favor of alternative hypothesis.</li>
+        </ul>
+
+</div>
+{% endblock %}

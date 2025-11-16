@@ -1,0 +1,86 @@
+{% extends "sidebar.html" %}
+{% block title %}Population Proportion  {% endblock %}
+{% block content %}
+
+<div class = "container">
+    <h3>Point Estimation and Confidence Intervals for a Population Proportion</h3>
+
+    <p class = "left-aligned"> Suppose we have a sample of size \(n\) with \(x\) successes (or have a 
+        specified attribute). The sample proportion, \(\hat{p} = \frac{x}{n}\) is the proportion of successes in the sample.
+        The sample proportion, \(\hat{p}\), is a random variable that estimates the population proportion, \(p\). 
+       <p class = "left-aligned"> The  distribution of \(\hat{p}\) is approximately normal if the sample size is large enough, with mean \(\mu_{\hat{p}} = p\) 
+        and standard deviation \(\sigma_{\hat{p}} = \sqrt{\frac{p(1-p)}{n}}\).</p>
+    </p>
+    <p>
+        <ol class = "left-aligned">
+            <li>Calculate the sample proportion \(\hat{p} = \frac{x}{n}\).</li>
+            <li>Determine the critical value, \(z_{\alpha/2}\)</li>
+            <li>Compute the standard error, \(se = \sqrt{\frac{\hat{p}(1-\hat{p})}{n}}\).</li>
+            <li> Margin of error, \(me = z_{\alpha/2} \cdot se\)</li>
+            <li>Construct the (\(1-\alpha\))% confidence interval (CI)  using the formula:
+                \( \displaystyle 
+                \hat{p} \pm z_{\alpha/2} \cdot \sqrt{\frac{\hat{p}(1-\hat{p})}{n}} \) or 
+                \(\left(\hat{p} - z_{\alpha/2} \cdot \sqrt{\frac{\hat{p}(1-\hat{p})}{n}}, \hat{p} + z_{\alpha/2} \cdot \sqrt{\frac{\hat{p}(1-\hat{p})}{n}}\right)\).
+                or </br> \( \qquad \left(\hat{p} - me, \hat{p} + me\right)\)
+            </li>
+        </ol>
+      
+
+   
+
+
+   
+
+    <h3>Provide the following values to calculate and plot </h3>
+    <form class="two-column-form" action = "{{ url_for('populationproportion.confidence_interval') }}" method="post">
+        <div class="form-grid">
+
+            <div class="form-group">
+                <label for="field1">Sample Size: \(n\)</label>
+                <input type="text" id="field1" name="sample_size" value="{{ sample_size or '' }}" required>
+            </div>
+
+            <div class="form-group">
+                <label for="field2"> Sample Proportion: \(\hat{p}\)</label>
+                <input type="text" id="field2" name="sample_proportion" value="{{ sample_proportion or '' }}" required>
+            </div>
+
+            <div class="form-group">
+                <label for="field2"> Significance Level \(\alpha\)</label>
+                <input type="text" id="field2" name="alpha" value="{{ alpha or '' }}" required>
+            </div>
+        </div>
+            
+        </br>
+        <div class="submit-button">
+            <input type="submit" value="Click to Display Values and Plot">
+        </div>
+    </form>
+      {% if ci_lower is not none and ci_upper is not none %}
+        <div class="container">
+          <h3 class = "left-aligned">Results:</h3>
+          <ul>
+            <li><b> Sample size, \(n\) = {{ sample_size }}</b></li>
+              <li><b>Sample proportion, \(\hat{p}\) = {{ sample_proportion }}</b></li>
+              <li><b> Significance Level, \(\alpha\) = {{ alpha }}</b></li>
+                <li><b>Critical value \(z_{\alpha/2}\) = {{ z_alpha }}</b></li>
+                <li><b>Standard error, \(se\) = {{ standard_error }}</b></li>
+                <li><b> Margin of error, \(me\)  = {{ margin_of_error }}</b></li>
+                <li><b>Confidence interval, CI  = \(\left( {{ ci_lower }}, {{ ci_upper }} \right)\)</b></li>
+
+          </ul>
+      </div>
+        {% endif %}
+
+    
+     
+
+</div>
+
+
+
+
+
+
+
+{% endblock %}
