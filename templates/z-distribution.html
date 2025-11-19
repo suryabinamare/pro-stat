@@ -30,6 +30,27 @@ is known or when the sample size is large enough to apply the Central Limit Theo
     </ul> 
 </div>
 
+
+
+<div class = "container">
+    <h2 class = "left-aligned">Shape of the normal curve:</h2>
+    <label> Mean: <span id = "mean-value">0</span>  </label> <br>
+    <input type = "range" id = "mean" min = "-10" max = "10" step = "0.1" value = "0">
+    <br> <br>
+    <label> Standard Deviation: <span id = "std-value">1</span>  </label> <br>
+    <input type = "range" id = "std" min = "0.1" max = "10" step = "0.1" value = "1">
+
+    <br> <br>
+    <img id = "plot" src = "">
+</div>
+
+
+
+
+
+
+
+
 <div class = "container">
     <h3 class = "left-aligned">Provide the following values:</h3>
     <ul>
@@ -97,4 +118,9 @@ is known or when the sample size is large enough to apply the Central Limit Theo
 
 
 </div>
+{% endblock %}
+
+
+{% block extra_js %}
+<script src="{{ url_for('static', filename='js/distributions.js') }}"></script>
 {% endblock %}
