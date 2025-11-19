@@ -1,4 +1,7 @@
-from flask import Flask, request, Blueprint, render_template, current_app
+import base64
+
+import io
+from flask import Flask, request, Blueprint, render_template, current_app, jsonify
 import os
 import pandas as pd 
 import numpy as np
@@ -18,6 +21,25 @@ matplotlib.use('Agg')  # Use non-GUI backend
 
 
 distributions_bp = Blueprint("distributions", __name__, template_folder="../templates")
+
+
+def create_normal_plot(mean, std):
+    x = np.linspace(mean - 4*std, mean + 4*std, 400)
+    y = (1/(std * np.sqrt(2*np.pi))) * np.exp(-((x-mean)**2) / (2*std**2))
+
+    fig, ax = plt.subplots()
+    ax.plot(x, y)
+    ax.set_title(f"Normal Distribution (mean={mean}, std={std})")
+
+    # Save plot to memory buffer
+    buf = io.BytesIO()
+    plt.savefig(buf, format="png")
+    buf.seek(0)
+    encoded = base64.b64encode(buf.read()).decode("utf-8")
+    plt.close()
+    return encoded
+
+
 
 @distributions_bp.route("/zdistribution", methods=["GET", "POST"])
 def zdistribution():
@@ -87,6 +109,14 @@ def zdistribution():
 
 
 
+@distributions_bp.route("/plot", methods = ['GET', 'POST'])
+def plot():
+    data = request.json
+    mean = float(data["mean"])
+    std = float(data["std"])
+
+    image = create_normal_plot(mean, std)
+    return jsonify({"image": image})
 
 
 
